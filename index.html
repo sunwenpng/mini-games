@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>小游戏合集</title>
+<meta name="description" content="两款竖屏网页小游戏：云霄突围、山寺小院。手机和电脑打开就能玩。">
+<style>
+  :root {
+    --bg: #17110c;
+    --card: #241a12;
+    --line: rgba(217, 178, 92, .28);
+    --gold: #d9b25c;
+    --text: #f3e8d2;
+    --muted: #b9a68a;
+    --serif: "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 15px/1.7 var(--sans);
+    padding: 48px max(16px, env(safe-area-inset-right, 0px)) 48px max(16px, env(safe-area-inset-left, 0px));
+  }
+  main { max-width: 720px; margin: 0 auto; display: grid; gap: 28px; }
+  h1 { font: 700 34px/1.2 var(--serif); margin: 0; letter-spacing: .04em; text-wrap: balance; }
+  .lead { color: var(--muted); margin: 8px 0 0; }
+  .games { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  a.game {
+    display: grid;
+    gap: 6px;
+    padding: 22px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--card);
+    color: inherit;
+    text-decoration: none;
+    transition: border-color .2s, transform .2s;
+  }
+  a.game:hover, a.game:focus-visible { border-color: var(--gold); transform: translateY(-2px); outline: none; }
+  .tag { font-size: 12px; letter-spacing: .12em; color: var(--gold); }
+  .name { font: 700 24px/1.3 var(--serif); }
+  .desc { color: var(--muted); font-size: 14px; }
+  .play { margin-top: 6px; color: var(--gold); font-weight: 600; }
+  footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 18px; }
+  footer a { color: var(--gold); }
+  @media (prefers-reduced-motion: reduce) { a.game { transition: none; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>小游戏合集</h1>
+    <p class="lead">竖屏网页小游戏，手机和电脑打开就能玩，不用下载。</p>
+  </header>
+  <section class="games">
+    <a class="game" href="temple-yard/">
+      <span class="tag">治愈 · 养成</span>
+      <span class="name">山寺小院</span>
+      <span class="desc">敲木鱼、撞钟，进大雄宝殿礼佛、供奉、诵经；收留山门外受伤的猫狗和小鸟，为它们找个好人家。</span>
+      <span class="play">进入小院 →</span>
+    </a>
+    <a class="game" href="sky-breakout/">
+      <span class="tag">射击 · 3D</span>
+      <span class="name">云霄突围</span>
+      <span class="desc">自动开火，拖动躲弹幕，一路升级变强，击落敌方旗舰。</span>
+      <span class="play">开始游戏 →</span>
+    </a>
+  </section>
+  <footer>
+    广告目前是模拟的。设计思路和上线方案见仓库里的 <a href="https://github.com/sunwenpng/mini-games/tree/main/docs">docs</a>。
+  </footer>
+</main>
+</body>
+</html>
