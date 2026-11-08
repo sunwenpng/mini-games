@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>广告模块演示</title>
+<style>
+  :root { color-scheme: light dark; --bg: #f7f7f4; --ink: #22262b; --muted: #666d75; --line: #dcdad3; --panel: #fff; --accent: #0b6e78; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #15181b; --ink: #e8e9e6; --muted: #a1a7ad; --line: #33393f; --panel: #1d2125; --accent: #5cc3cd; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.7 -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  main { max-width: 640px; margin: 0 auto; padding: 32px 16px 96px; }
+  h1 { font-size: 28px; margin: 0 0 6px; }
+  p { margin: 0 0 16px; color: var(--muted); }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  button { padding: 10px 14px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--ink); font: inherit; cursor: pointer; }
+  button.main { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  label { display: flex; gap: 6px; align-items: center; color: var(--muted); font-size: 15px; }
+  #log { margin: 0; padding: 12px; min-height: 220px; max-height: 340px; overflow: auto; list-style: none; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); font-size: 14px; }
+  #log li { padding: 2px 0; }
+  #fake { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; flex-direction: column; gap: 12px; background: rgba(0, 0, 0, .86); color: #fff; }
+  #fake.on { display: flex; }
+  #banner { position: fixed; left: 0; right: 0; bottom: 0; display: none; padding: 14px; text-align: center; background: var(--accent); color: var(--bg); }
+  #banner.on { display: block; }
+</style>
+</head>
+<body>
+<main>
+  <h1>广告模块演示</h1>
+  <p>这里用的是模拟广告，不会接入真实平台。可以试试不同情况下模块怎么决定放不放广告。</p>
+  <div class="row">
+    <button class="main" id="end">结束一局</button>
+    <button id="revive">看广告复活</button>
+    <button id="double">看广告双倍</button>
+    <button id="bannerBtn">显示 / 隐藏横幅</button>
+    <button id="skip60">快进 2 分钟</button>
+  </div>
+  <div class="row">
+    <label><input type="checkbox" id="fill" checked> 有广告可放</label>
+    <label><input type="checkbox" id="finish" checked> 看完广告</label>
+  </div>
+  <ol id="log"></ol>
+</main>
+<div id="fake"><strong>模拟广告</strong><span id="count"></span></div>
+<div id="banner">模拟横幅广告</div>
+
+<script src="ad-kit.js"></script>
+<script>
+  const $ = id => document.getElementById(id);
+  const REASONS = {
+    too_early: '新玩家保护期，先不打扰',
+    not_this_round: '这一局不轮到',
+    cooldown: '距离上次太近',
+    daily_cap: '今天已到上限',
+    session_cap: '本次游戏已到上限',
+    busy: '另一个广告正在播放',
+    no_fill: '平台暂时没有广告',
+    not_finished: '没看完，不发奖',
+  };
+  const log = text => {
+    const li = document.createElement('li');
+    li.textContent = text;
+    $('log').prepend(li);
+  };
+
+  function play(result) {
+    return new Promise(resolve => {
+      if (!$('fill').checked) return resolve({ ok: false, reason: 'no_fill' });
+      let left = 2;
+      $('fake').classList.add('on');
+      $('count').textContent = left + ' 秒';
+      const timer = setInterval(() => {
+        left -= 1;
+        $('count').textContent = left + ' 秒';
+        if (left > 0) return;
+        clearInterval(timer);
+        $('fake').classList.remove('on');
+        resolve(result());
+      }, 1000);
+    });
+  }
+
+  const provider = {
+    name: 'demo',
+    showRewarded: () => play(() => ({ ok: true, completed: $('finish').checked })),
+    showInterstitial: () => play(() => ({ ok: true })),
+    showBanner: () => {
+      if (!$('fill').checked) return Promise.resolve({ ok: false, reason: 'no_fill' });
+      $('banner').classList.add('on');
+      return Promise.resolve({ ok: true });
+    },
+    hideBanner: () => $('banner').classList.remove('on'),
+  };
+
+  let offset = 0;
+  const ads = AdKit.create({
+    provider,
+    placements: AdKit.recommendedPlacements({ rewarded: 'demo-r', interstitial: 'demo-i', banner: 'demo-b' }),
+    now: () => Date.now() + offset,
+  });
+
+  const why = reason => REASONS[reason] || reason;
+  let round = 0;
+  $('end').onclick = async () => {
+    round += 1;
+    ads.noteRound();
+    const r = await ads.showInterstitial('round_end');
+    log('第 ' + round + ' 局结束：' + (r.shown ? '放了插屏' : '不放插屏（' + why(r.reason) + '）'));
+  };
+  const reward = (name, text) => async () => {
+    const r = await ads.showRewarded(name);
+    log(r.rewarded ? '已发奖：' + text : '没有发奖（' + why(r.reason) + '）');
+  };
+  $('revive').onclick = reward('revive', '复活');
+  $('double').onclick = reward('double_score', '分数翻倍');
+  $('bannerBtn').onclick = async () => {
+    if ($('banner').classList.contains('on')) {
+      ads.hideBanner('menu_banner');
+      log('横幅已隐藏');
+    } else {
+      const r = await ads.showBanner('menu_banner');
+      log(r.shown ? '横幅已显示' : '横幅没显示（' + why(r.reason) + '）');
+    }
+  };
+  $('skip60').onclick = () => {
+    offset += 120000;
+    log('已快进 2 分钟');
+  };
+</script>
+</body>
+</html>
