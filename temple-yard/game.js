@@ -752,14 +752,17 @@ function speak(str, rate) {
       const i = liveUtts.indexOf(u);
       if (i >= 0) liveUtts.splice(i, 1);
     };
-    u.onstart = () => { G.ttsOk = true; };
+    u.onstart = () => {
+      G.ttsOk = true;
+      ttsBroken = false;
+    };
     u.onend = done;
     u.onerror = done;
     /* 留住引用，有的浏览器会提前回收导致念到一半没声音 */
     liveUtts.push(u);
     if (liveUtts.length > 20) liveUtts.shift();
-    /* 第一次念的时候检查一下：2.5 秒内没开口，说明这台设备的朗读不能用 */
-    if (!G.ttsOk && !G.ttsCheckAt) G.ttsCheckAt = G.clock + 2.5;
+    /* 第一次念时检查：语音引擎冷启动可能要几秒，等 6 秒还没开口才改用吟唱声；之后一旦开口就恢复人声 */
+    if (!G.ttsOk && !G.ttsCheckAt) G.ttsCheckAt = G.clock + 6;
     const go = () => {
       try {
         if (speechSynthesis.paused) speechSynthesis.resume();
@@ -1439,7 +1442,8 @@ function step(dt) {
     G.ttsCheckAt = 0;
     if (!G.ttsOk) {
       ttsBroken = true;
-      stopSpeech();
+      ttsPending = 0;
+      G.speaking = false;
       if (G.sutra) toast('这台设备的朗读没有声音，改用吟唱声', 'info', 4);
     }
   }
