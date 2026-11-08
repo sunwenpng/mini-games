@@ -715,9 +715,12 @@ if (hasTTS) {
 }
 
 let ttsPending = 0;
+let ttsBroken = false;
+let ttsUnlocked = false;
+const liveUtts = [];
 
 function canSpeak() {
-  if (!hasTTS || muted) return false;
+  if (!hasTTS || muted || ttsBroken) return false;
   try {
     const vs = speechSynthesis.getVoices();
     return !vs.length || !!zhVoice;
@@ -730,9 +733,11 @@ function canSpeak() {
 function speak(str, rate) {
   if (!canSpeak()) return false;
   try {
+    let cancelled = false;
     if (ttsPending > 1) {
       speechSynthesis.cancel();
       ttsPending = 0;
+      cancelled = true;
     }
     const u = new SpeechSynthesisUtterance(str);
     u.lang = 'zh-CN';
@@ -744,10 +749,28 @@ function speak(str, rate) {
     const done = () => {
       ttsPending = Math.max(0, ttsPending - 1);
       G.speaking = ttsPending > 0;
+      const i = liveUtts.indexOf(u);
+      if (i >= 0) liveUtts.splice(i, 1);
     };
+    u.onstart = () => { G.ttsOk = true; };
     u.onend = done;
     u.onerror = done;
-    speechSynthesis.speak(u);
+    /* 留住引用，有的浏览器会提前回收导致念到一半没声音 */
+    liveUtts.push(u);
+    if (liveUtts.length > 20) liveUtts.shift();
+    /* 第一次念的时候检查一下：2.5 秒内没开口，说明这台设备的朗读不能用 */
+    if (!G.ttsOk && !G.ttsCheckAt) G.ttsCheckAt = G.clock + 2.5;
+    const go = () => {
+      try {
+        if (speechSynthesis.paused) speechSynthesis.resume();
+        speechSynthesis.speak(u);
+      } catch (e) {
+        done();
+      }
+    };
+    /* 刚取消后立刻念，Chrome 有时会把新句子也吞掉，稍等一下再念 */
+    if (cancelled) setTimeout(go, 80);
+    else go();
     return true;
   } catch (e) {
     ttsPending = 0;
@@ -760,6 +783,28 @@ function stopSpeech() {
   ttsPending = 0;
   G.speaking = false;
   try { if (hasTTS) speechSynthesis.cancel(); } catch (e) { /* 忽略 */ }
+}
+
+/* 手机浏览器只允许在“点完”的那一刻开启声音和朗读，所以在 touchend、click 里解锁一次。 */
+function unlockMedia() {
+  audio();
+  if (ttsUnlocked || !hasTTS) return;
+  ttsUnlocked = true;
+  try {
+    const u = new SpeechSynthesisUtterance(' ');
+    u.volume = 0;
+    speechSynthesis.speak(u);
+  } catch (e) { /* 忽略 */ }
+}
+window.addEventListener('touchend', unlockMedia, { passive: true });
+window.addEventListener('click', unlockMedia);
+window.addEventListener('keydown', unlockMedia);
+
+function voiceLabel() {
+  if (muted) return '已静音';
+  if (!hasTTS || ttsBroken) return '无人声，用吟唱代替';
+  if (zhVoice) return '人声：' + zhVoice.name.replace(/\s*\(.*$/, '').slice(0, 6);
+  return '人声：系统语音';
 }
 
 function voiceBusy() {
@@ -926,6 +971,7 @@ function toggleAutoSutra() {
   g.auto = !g.auto;
   g.t = 0.2;
   if (!g.auto) stopSpeech();
+  else unlockMedia();
 }
 
 function toggleFishBeat() {
@@ -1386,6 +1432,15 @@ function step(dt) {
     while (G.monkT >= iv) {
       G.monkT -= iv;
       knock('monk');
+    }
+  }
+
+  if (G.ttsCheckAt && G.clock > G.ttsCheckAt) {
+    G.ttsCheckAt = 0;
+    if (!G.ttsOk) {
+      ttsBroken = true;
+      stopSpeech();
+      if (G.sutra) toast('这台设备的朗读没有声音，改用吟唱声', 'info', 4);
     }
   }
 
@@ -3205,7 +3260,7 @@ function drawSutra() {
 
   /* 竖排，从右往左读；经文长的分页 */
   const top = y + 24;
-  const bottom = y + h - 84;
+  const bottom = y + h - 100;
   const rows = Math.max(8, Math.floor((bottom - top) / step));
   const maxCols = Math.max(1, Math.floor((w - 70) / 19));
   const pageSize = rows * maxCols;
@@ -3232,8 +3287,10 @@ function drawSutra() {
   let status = su.short + ' · ' + pct + '%';
   if (pages > 1) status += ' · 第 ' + (page + 1) + '/' + pages + ' 页';
   status += g.auto ? ' · 自动诵经中' : ' · 敲木鱼诵一句';
+
   if (g.done > 0) status = '诵毕 · ' + su.short + '已诵 ' + (S.sutraCount[su.id] || 0) + ' 遍';
-  text(status, x + 24, y + h - 68, 12, '#6b5a48', 'left', 600);
+  text(status, x + 24, y + h - 86, 12, '#6b5a48', 'left', 600);
+  text(voiceLabel(), x + 24, y + h - 67, 11.5, ttsBroken || !hasTTS ? '#a8322a' : '#8a7a68', 'left', 600);
   const by = y + h - 52;
   button('换经', x + 22, by, 62, 40, switchSutra, 'ink');
   button(S.opt.fishBeat ? '木鱼 开' : '木鱼 关', x + 90, by, 72, 40, toggleFishBeat, 'ink');
