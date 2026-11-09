@@ -16,7 +16,7 @@
     options: {
       ui: [
         { id: 'zh-CN', state: 'ok' },
-        { id: 'zh-TW', state: 'off', why: 'why.notYet' },
+        { id: 'zh-TW', state: 'draft', why: 'why.draftUiTw' },
         { id: 'en', state: 'draft', why: 'why.draftUi' },
       ],
       content: [
@@ -39,6 +39,33 @@
     },
     defaults: { ui: 'zh-CN', content: 'lzh', translation: 'none', voice: 'sys.clear' },
     review: { advisor: null, nativeReview: { 'zh-CN': 'self' }, lastReview: null },
+    /* 进入前须知（平台渲染，文案由包提供）。 */
+    saveKeys: ['threshold-han-save-v1'],
+    notice: ['notice.experience', 'notice.noAds', 'notice.voice', 'notice.phase1'],
+    /* 节历：农历（中国时区）。日期是汉传寺院通行的说法，各地可能不同，待顾问审定。 */
+    calendar: {
+      tz: 'Asia/Shanghai',
+      showLunar: true,
+      note: 'cal.note.han',
+      lunar: [
+        { id: 'obs.han.maitreya', month: 1, day: 1 },
+        { id: 'obs.han.renunciation', month: 2, day: 8 },
+        { id: 'obs.han.parinirvana', month: 2, day: 15 },
+        { id: 'obs.han.guanyinBirth', month: 2, day: 19 },
+        { id: 'obs.han.vesak', month: 4, day: 8 },
+        { id: 'obs.han.guanyinAwakening', month: 6, day: 19 },
+        { id: 'obs.han.ullambana', month: 7, day: 15 },
+        { id: 'obs.han.ksitigarbha', month: 7, day: 30, lastDay: true },
+        { id: 'obs.han.guanyinRenunciation', month: 9, day: 19 },
+        { id: 'obs.han.bhaisajyaguru', month: 9, day: 30, lastDay: true },
+        { id: 'obs.han.amitabha', month: 11, day: 17 },
+        { id: 'obs.han.bodhi', month: 12, day: 8 },
+      ],
+      lunarDays: [
+        { id: 'obs.han.new', day: 1 },
+        { id: 'obs.han.full', day: 15 },
+      ],
+    },
     rules: {
       adsInSacredSpace: false,
       practicesYieldCurrency: false,
