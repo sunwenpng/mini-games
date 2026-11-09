@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f4f2ee">
+<title>Threshold</title>
+<link rel="icon" href="brand/logo-a.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;600&family=Noto+Sans+Devanagari:wght@400;600&family=Noto+Sans+Hebrew:wght@400;600&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+Thai:wght@400;600&family=Noto+Serif+SC:wght@600;700&display=swap">
+<link rel="stylesheet" href="styles.css?v=1">
+</head>
+<body>
+<svg width="0" height="0" class="defs" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="logo-a" viewBox="0 0 64 64">
+      <path d="M8 56 H56" stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M16 56 V12 H38" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <path d="M48 56 V22" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
+      <path d="M48 22 L38 27 V51 L48 56 Z" fill="currentColor" opacity=".28"/>
+      <circle cx="28" cy="36" r="4.5" fill="#d68a3a"/>
+    </symbol>
+    <symbol id="logo-b" viewBox="0 0 64 64">
+      <g stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none">
+        <path d="M14 26 A20 20 0 0 1 26 14"/>
+        <path d="M38 14 A20 20 0 0 1 50 26"/>
+        <path d="M50 38 A20 20 0 0 1 38 50"/>
+        <path d="M26 50 A20 20 0 0 1 14 38"/>
+      </g>
+      <circle cx="32" cy="32" r="5" fill="#d68a3a"/>
+    </symbol>
+    <symbol id="logo-c" viewBox="0 0 64 64">
+      <path d="M8 42 H56" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+      <path d="M18 50 H46" stroke="currentColor" stroke-width="4" stroke-linecap="round" opacity=".45"/>
+      <circle cx="32" cy="29" r="6" fill="#d68a3a"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="page">
+  <header class="bar">
+    <a id="brand-link" class="brand" href="#view=home">
+      <svg class="mark" width="34" height="34" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="#logo-a"></use></svg>
+      <span><b id="brand-name"></b><small id="brand-sub"></small></span>
+    </a>
+    <nav id="nav"></nav>
+  </header>
+  <main id="main" class="wrap"></main>
+  <footer id="footer"></footer>
+</div>
+<div id="toast" class="toast" role="status" hidden></div>
+<div id="sr" class="sr-only" aria-live="polite"></div>
+
+<script src="locales/zh-CN.js?v=1"></script>
+<script src="locales/en.js?v=1"></script>
+<script src="data/registry.js?v=1"></script>
+<script src="data/script-samples.js?v=1"></script>
+<script src="traditions/buddhism.han/pack.js?v=1"></script>
+<script src="traditions/buddhism.han/content.js?v=1"></script>
+<script src="core/i18n.js?v=1"></script>
+<script src="core/save.js?v=1"></script>
+<script src="core/rights.js?v=1"></script>
+<script src="core/app.js?v=1"></script>
+<script>Threshold.app.init();</script>
+</body>
+</html>
