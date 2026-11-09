@@ -34,6 +34,36 @@
     doc.title = t('brand.title');
   }
 
+  /* ---------- 显示：字号与动效 ---------- */
+  const SIZES = { m: 1, l: 1.12, xl: 1.25 };
+  function applyDisplay() {
+    const d = (app.save && app.save.display) || {};
+    const html = doc.documentElement;
+    html.style.zoom = SIZES[d.size] && d.size !== 'm' ? String(SIZES[d.size]) : '';
+    if (d.motion === 'reduce' || d.motion === 'full') html.setAttribute('data-motion', d.motion);
+    else html.removeAttribute('data-motion');
+  }
+
+  /* 各传统包的游戏存档（只在本机）。存档码会一起带上。 */
+  function packSaveKeys() {
+    const keys = [];
+    Object.keys(T.PACKS || {}).forEach(id => (T.PACKS[id].saveKeys || []).forEach(k => keys.push(k)));
+    return keys;
+  }
+
+  function readPackSaves() {
+    const s = store();
+    const out = {};
+    if (!s) return out;
+    packSaveKeys().forEach(k => {
+      try {
+        const v = s.getItem(k);
+        if (v) out[k] = v;
+      } catch (e) { /* 读不到就跳过 */ }
+    });
+    return out;
+  }
+
   /* ---------- 播报与提示 ---------- */
   let toastTimer = null;
   function toast(msg) {
@@ -96,7 +126,13 @@
   function prefsFor(versionId) {
     const pack = packOf(versionId);
     if (!pack) return {};
-    return app.save.prefs[versionId] || Object.assign({}, pack.defaults);
+    if (app.save.prefs[versionId]) return app.save.prefs[versionId];
+    /* 没选过时，界面语言默认跟平台语言走（包里有且可选的话）。 */
+    const d = Object.assign({}, pack.defaults);
+    const cur = app.i18n && app.i18n.locale;
+    const opt = pack.options.ui.find(o => o.id === cur);
+    if (opt && opt.state !== 'off') d.ui = cur;
+    return d;
   }
 
   function packOf(versionId) {
@@ -154,7 +190,7 @@
       </section>
       <ul class="grid" role="list">
         ${f.versions.map(v => {
-          const hash = v.status === 'live' ? T.Save.formatLink(v.id, null, 'pack') : '#view=prep&v=' + v.id;
+          const hash = T.canEnter(v.id) ? T.Save.formatLink(v.id, null, 'pack') : '#view=prep&v=' + v.id;
           return `<li><a class="card" href="${esc(hash)}">
             <span class="row"><span class="name">${esc(t('version.' + v.id + '.name'))}</span>${badge(v.status)}</span>
             <span class="meta">${esc(t('version.' + v.id + '.place'))} · ${esc(t('version.' + v.id + '.region'))}</span>
@@ -240,6 +276,35 @@
     </fieldset>`;
   }
 
+  function lunarText(l) {
+    const months = t('cal.months').split(',');
+    const days = t('cal.days').split(',');
+    return t('cal.lunarDate', { month: (l.leap ? t('cal.leap') : '') + (months[l.month - 1] || l.month), day: days[l.day - 1] || l.day });
+  }
+
+  function calendarPanel(pack) {
+    const cal = pack.calendar;
+    if (!cal || !T.Calendar) return '';
+    const now = new Date();
+    const name = o => t(o.id) + (o.approx ? t('cal.approx') : '');
+    const today = T.Calendar.observancesOn(cal, now);
+    const l = cal.showLunar ? T.Calendar.lunar(now, cal.tz) : null;
+    let dateFmt = null;
+    try { dateFmt = new Intl.DateTimeFormat(app.i18n.lang, { month: 'short', day: 'numeric', timeZone: cal.tz }); } catch (e) { dateFmt = null; }
+    const next = T.Calendar.upcoming(cal, now, 200, 8).filter(o => o.inDays > 0).slice(0, 4);
+    const when = o => (o.inDays === 1 ? t('cal.tomorrow') : t('cal.inDays', { n: o.inDays }));
+    return `<section class="panel cal">
+      <h2>${esc(t('cal.title'))}</h2>
+      ${l ? `<p>${esc(t('cal.today', { date: lunarText(l) }))}</p>` : ''}
+      ${today.map(o => `<p class="today">${esc(t('cal.todayIs', { name: name(o) }))}</p>`).join('')}
+      ${next.length ? `<h3>${esc(t('cal.upcoming'))}</h3><ul class="checklist" role="list">${next.map(o => {
+        const d = dateFmt ? dateFmt.format(new Date(o.date + 'T12:00:00Z')) : o.date;
+        return `<li><span class="mark-ok" aria-hidden="true">·</span><span>${esc(name(o))} <span class="note">${esc(d)} · ${esc(when(o))}</span></span></li>`;
+      }).join('')}</ul>` : ''}
+      ${cal.note ? `<p class="note">${esc(t(cal.note))}</p>` : ''}
+    </section>`;
+  }
+
   function viewPack() {
     const id = app.state.version;
     const hit = T.findVersion(id);
@@ -247,6 +312,10 @@
     const prefs = prefsFor(id);
     const voice = T.VOICES[prefs.voice] || {};
     const href = pack.entry + T.Save.formatLink(id, prefs);
+    const ackNeeded = T.needsAck(id);
+    const acked = !!app.save.acks[id];
+    const params = { voice: t('voice.' + prefs.voice), kind: t('kind.' + voice.kind) };
+    const notice = pack.notice || [];
     return `
       ${crumbs([{ label: t('nav.allTraditions'), hash: '#view=home' }, { label: t('family.' + hit.family.id + '.name'), hash: '#view=family&f=' + hit.family.id }, { label: t('version.' + id + '.name') }])}
       <section class="intro">
@@ -259,14 +328,19 @@
       <section class="panel">
         <h2>${esc(t('notice.title'))}</h2>
         <ul class="checklist" role="list">
-          <li><span class="mark-ok" aria-hidden="true">·</span><span>${esc(t('notice.experience'))}</span></li>
-          <li><span class="mark-ok" aria-hidden="true">·</span><span>${esc(t('notice.noAds'))}</span></li>
-          <li><span class="mark-ok" aria-hidden="true">·</span><span>${esc(t('notice.voice', { voice: t('voice.' + prefs.voice), kind: t('kind.' + voice.kind) }))}</span></li>
-          <li><span class="mark-ok" aria-hidden="true">·</span><span>${esc(t('notice.phase1'))}</span></li>
+          ${notice.map(k => `<li><span class="mark-ok" aria-hidden="true">·</span><span>${esc(t(k, params))}</span></li>`).join('')}
         </ul>
       </section>
+      ${calendarPanel(pack)}
+      ${ackNeeded ? `<section class="panel warn-panel" aria-labelledby="preview-title">
+        <h2 id="preview-title">${esc(t('preview.title'))}</h2>
+        <p>${esc(t('preview.body'))}</p>
+        <label class="ack" for="ack-${esc(id.replace(/\./g, '-'))}"><input type="checkbox" id="ack-${esc(id.replace(/\./g, '-'))}" name="ack" data-version="${esc(id)}" ${acked ? 'checked' : ''}> <span>${esc(t('preview.ack'))}</span></label>
+      </section>` : ''}
       <div class="actions">
-        <a class="primary" href="${esc(href)}" data-act="enter" data-version="${esc(id)}">${esc(t('action.enter', { place: t('version.' + id + '.place') }))}</a>
+        ${ackNeeded && !acked
+          ? `<button type="button" class="primary" data-act="need-ack" aria-describedby="preview-title">${esc(t('action.enter', { place: t('version.' + id + '.place') }))}</button>`
+          : `<a class="primary" href="${esc(href)}" data-act="enter" data-version="${esc(id)}">${esc(t('action.enter', { place: t('version.' + id + '.place') }))}</a>`}
         <a class="secondary" href="#view=sources&v=${esc(id)}">${esc(t('action.sources'))}</a>
       </div>`;
   }
@@ -285,14 +359,14 @@
       <h2>${esc(t('sources.texts'))}</h2>
       <div class="two">
         ${records.map(r => `<article class="panel">
-          <h3 lang="zh-Hant">${esc(Object.values(r.title)[0])}</h3>
+          <h3 lang="${esc(r.titleLang || 'zh-Hant')}">${esc(r.title[r.titleLang] || Object.values(r.title)[0])}${r.title.en && r.titleLang !== 'en' ? ` <span class="note" lang="en">${esc(r.title.en)}</span>` : ''}</h3>
           <dl class="src">
             ${row('src.type', esc(t('type.' + r.type)))}
-            ${row('src.edition', `<span lang="zh">${esc(r.edition)}</span>`)}
-            ${row('src.source', `<span lang="zh">${esc(r.source.name)}</span> (${esc(r.source.id)})`)}
+            ${row('src.edition', `<span lang="${esc(r.editionLang || 'zh')}">${esc(r.edition)}</span>`)}
+            ${row('src.source', `<span lang="${esc(r.editionLang || 'zh')}">${esc(r.source.name)}</span> (${esc(r.source.id)})`)}
             ${row('src.license', esc(t('license.' + r.license)))}
             ${row('src.review', esc(t('review.' + r.reviewStatus)))}
-            ${row('src.length', esc(t('src.chars', { n: [...Object.values(r.text)[0]].length })))}
+            ${row('src.length', esc(Array.isArray(Object.values(r.text)[0]) ? t('src.lines', { n: Object.values(r.text)[0].length }) : t('src.chars', { n: [...Object.values(r.text)[0]].length })))}
           </dl>
         </article>`).join('')}
       </div>
@@ -333,6 +407,20 @@
         </div>
       </section>
       <section class="panel">
+        <h2>${esc(t('settings.display'))}</h2>
+        <p class="note">${esc(t('display.hint'))}</p>
+        <fieldset class="inline"><legend>${esc(t('display.size'))}</legend><div class="opts row">
+          ${['m', 'l', 'xl'].map(k => `<label class="opt" for="size-${k}"><input type="radio" name="display-size" id="size-${k}" value="${k}" ${(app.save.display.size || 'm') === k ? 'checked' : ''}><span class="label">${esc(t('display.size.' + k))}</span></label>`).join('')}
+        </div></fieldset>
+        <fieldset class="inline"><legend>${esc(t('display.motion'))}</legend><div class="opts row">
+          ${['system', 'reduce', 'full'].map(k => `<label class="opt" for="motion-${k}"><input type="radio" name="display-motion" id="motion-${k}" value="${k}" ${(app.save.display.motion || 'system') === k ? 'checked' : ''}><span class="label">${esc(t('display.motion.' + k))}</span></label>`).join('')}
+        </div></fieldset>
+      </section>
+      <section class="panel">
+        <h2>${esc(t('privacy.title'))}</h2>
+        <p class="note">${esc(t('privacy.body'))}</p>
+      </section>
+      <section class="panel">
         <h2>${esc(t('code.title'))}</h2>
         <p class="note">${esc(t('code.hint'))}</p>
         <label class="field-label" for="code-out">${esc(t('code.export'))}</label>
@@ -360,6 +448,13 @@
         <p class="note">${esc(t('brand.dir.' + d.key + '.why'))}</p>
         <div class="logo-row">${tile(d.id, 128, 'light')}${tile(d.id, 48, 'light')}${tile(d.id, 24, 'light')}${tile(d.id, 16, 'light')}${tile(d.id, 48, 'dark')}${tile(d.id, 24, 'dark')}</div>
       </section>`).join('')}
+      <section class="panel">
+        <h2>${esc(t('brand.icons'))}</h2>
+        <p class="note">${esc(t('brand.iconsNote'))}</p>
+        <div class="logo-row icons">
+          ${['ios', 'circle', 'squircle', 'mono', 'print'].map(k => `<figure><div class="app-icon ${k}">${logo('logo-a', 46)}</div><figcaption>${esc(t('brand.icon.' + k))}</figcaption></figure>`).join('')}
+        </div>
+      </section>
       <section class="panel">
         <h2>${esc(t('brand.lockups'))}</h2>
         <p class="note">${esc(t('brand.lockupsNote'))}</p>
@@ -426,11 +521,15 @@
     } else if (act === 'enter') {
       app.save.lastVersion = el.getAttribute('data-version');
       persist();
+    } else if (act === 'need-ack') {
+      const box = doc.querySelector('input[name="ack"]');
+      if (box) box.focus();
+      toast(t('preview.needAck'));
     } else if (act === 'export') {
-      doc.getElementById('code-out').value = T.Save.exportCode(app.save);
+      doc.getElementById('code-out').value = T.Save.exportCode(app.save, readPackSaves());
     } else if (act === 'copy') {
       const area = doc.getElementById('code-out');
-      if (!area.value) area.value = T.Save.exportCode(app.save);
+      if (!area.value) area.value = T.Save.exportCode(app.save, readPackSaves());
       area.select();
       const msg = doc.getElementById('code-msg');
       const fail = () => { msg.textContent = t('code.copyFailed'); };
@@ -440,7 +539,7 @@
         fail();
       }
     } else if (act === 'read') {
-      const r = T.Save.parseCode(doc.getElementById('code-in').value, Date.now());
+      const r = T.Save.parseCode(doc.getElementById('code-in').value, Date.now(), packSaveKeys());
       const msg = doc.getElementById('code-msg');
       const apply = doc.querySelector('[data-act="apply"]');
       if (r.error) {
@@ -448,14 +547,25 @@
         apply.hidden = true;
         msg.textContent = t('code.error.' + r.error);
       } else {
-        app.importPending = r.data;
+        app.importPending = r;
         apply.hidden = false;
-        msg.textContent = t('code.summary', { n: Object.keys(r.data.prefs).length });
+        const g = Object.keys(r.packs || {}).length;
+        msg.textContent = g ? t('code.summaryPacks', { n: Object.keys(r.data.prefs).length, g }) : t('code.summary', { n: Object.keys(r.data.prefs).length });
       }
     } else if (act === 'apply' && app.importPending) {
-      app.save = app.importPending;
+      const pending = app.importPending;
+      app.save = pending.data;
       app.importPending = null;
       persist();
+      const s = store();
+      Object.keys(pending.packs || {}).forEach(k => {
+        try {
+          const prev = s.getItem(k);
+          if (prev) s.setItem(k + '.bak', prev);
+          s.setItem(k, pending.packs[k]);
+        } catch (e) { toast(t('toast.saveFailed')); }
+      });
+      applyDisplay();
       setLocale(app.save.uiLocale || app.i18n.locale);
       render();
       toast(t('toast.imported'));
@@ -464,6 +574,22 @@
 
   function onChange(e) {
     const input = e.target;
+    if (input.name === 'display-size' || input.name === 'display-motion') {
+      app.save.display[input.name === 'display-size' ? 'size' : 'motion'] = input.value;
+      persist();
+      applyDisplay();
+      return;
+    }
+    if (input.name === 'ack') {
+      const v = input.getAttribute('data-version');
+      if (input.checked) app.save.acks[v] = true;
+      else delete app.save.acks[v];
+      persist();
+      render(false);
+      const box = doc.querySelector('input[name="ack"]');
+      if (box) box.focus();
+      return;
+    }
     if (input.name === 'platform-ui') {
       app.save.uiLocale = input.value;
       persist();
@@ -490,6 +616,7 @@
     app.save = loaded.data;
     app.note = loaded.note;
     setLocale(app.save.uiLocale || 'zh-CN');
+    applyDisplay();
     if (loaded.note === 'migrated') persist();
     routeFromHash();
     render(false);
@@ -500,5 +627,7 @@
   };
 
   app.route = routeFromHash;
+  app.readPackSaves = readPackSaves;
+  app.packSaveKeys = packSaveKeys;
   app.render = render;
 })(typeof window !== 'undefined' ? window : globalThis);

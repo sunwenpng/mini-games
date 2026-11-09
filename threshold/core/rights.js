@@ -8,7 +8,7 @@
   const T = (root.Threshold = root.Threshold || {});
 
   const REVIEW = ['missing', 'draft', 'self-checked', 'native-reviewed', 'advisor-approved'];
-  const TYPES = ['sutra', 'dharani', 'gatha', 'mantra', 'nianfo', 'prayer', 'hymn', 'scripture'];
+  const TYPES = ['sutra', 'dharani', 'gatha', 'mantra', 'nianfo', 'prayer', 'hymn', 'scripture', 'homage', 'refuge', 'precepts', 'recollection', 'metta'];
   const KINDS = ['system', 'reference', 'owned'];
 
   function reviewRank(status) {

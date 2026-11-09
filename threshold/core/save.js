@@ -12,7 +12,7 @@
   const FIELDS = ['ui', 'content', 'translation', 'voice'];
 
   function fresh(now) {
-    return { ver: 1, uiLocale: null, lastVersion: null, prefs: {}, notify: {}, migratedFrom: null, createdAt: now || Date.now() };
+    return { ver: 1, uiLocale: null, lastVersion: null, prefs: {}, notify: {}, acks: {}, display: { size: 'm', motion: 'system' }, migratedFrom: null, createdAt: now || Date.now() };
   }
 
   function parse(raw) {
@@ -41,6 +41,12 @@
     const out = Object.assign(fresh(now), s);
     out.prefs = s.prefs && typeof s.prefs === 'object' ? s.prefs : {};
     out.notify = s.notify && typeof s.notify === 'object' ? s.notify : {};
+    out.acks = s.acks && typeof s.acks === 'object' ? s.acks : {};
+    const d = s.display && typeof s.display === 'object' ? s.display : {};
+    out.display = {
+      size: ['m', 'l', 'xl'].indexOf(d.size) >= 0 ? d.size : 'm',
+      motion: ['system', 'reduce', 'full'].indexOf(d.motion) >= 0 ? d.motion : 'system',
+    };
     Object.keys(out.prefs).forEach(id => {
       const p = normalizePrefs(id, out.prefs[id]);
       if (p) out.prefs[id] = p;
@@ -113,13 +119,15 @@
     return h.toString(36);
   }
 
-  function exportCode(data) {
-    const json = JSON.stringify(data);
+  /* packs：{ 存档键: 原始 JSON 字符串 }，可省略。带游戏进度时外面包一层 { thrs: 2, platform, packs }。 */
+  function exportCode(data, packs) {
+    const hasPacks = packs && Object.keys(packs).length;
+    const json = JSON.stringify(hasPacks ? { thrs: 2, platform: data, packs } : data);
     return 'THRS1:' + btoa(encodeURIComponent(json)) + ':' + checksum(json);
   }
 
-  /* 返回 { data } 或 { error: 'format'|'damaged'|'checksum'|'content' } */
-  function parseCode(code, now) {
+  /* 返回 { data, packs } 或 { error: 'format'|'damaged'|'checksum'|'content' }。allowed：可以写入的游戏存档键。 */
+  function parseCode(code, now, allowed) {
     const m = String(code || '').trim().match(/^THRS1:([A-Za-z0-9+/=]+):([0-9a-z]+)$/);
     if (!m) return { error: 'format' };
     let json;
@@ -131,7 +139,18 @@
     if (checksum(json) !== m[2]) return { error: 'checksum' };
     const s = parse(json);
     if (!s) return { error: 'content' };
-    return { data: merge(s, now) };
+    if (s.thrs === 2) {
+      const plat = s.platform && typeof s.platform === 'object' ? s.platform : null;
+      if (!plat) return { error: 'content' };
+      const packs = {};
+      const src = s.packs && typeof s.packs === 'object' ? s.packs : {};
+      Object.keys(src).forEach(k => {
+        if (allowed && allowed.indexOf(k) < 0) return;
+        if (typeof src[k] === 'string' && parse(src[k])) packs[k] = src[k];
+      });
+      return { data: merge(plat, now), packs };
+    }
+    return { data: merge(s, now), packs: {} };
   }
 
   /* ---------- 深链接：#v=buddhism.han&ui=zh-CN&src=lzh&tr=none&voice=sys.clear ---------- */
