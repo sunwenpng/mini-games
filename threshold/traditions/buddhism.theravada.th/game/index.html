@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1d2a26">
+<meta name="description" content="Threshold · Thai Theravada Buddhism (unreviewed preview): morning alms, Pali chanting, observance days and temple dogs and cats.">
+<title>ลานโพธิ์</title>
+<link rel="icon" href="../../../brand/logo-a.svg" type="image/svg+xml">
+<link rel="manifest" href="../../../manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600&family=Noto+Serif+Thai:wght@500;700&family=Noto+Sans+SC:wght@400;600&display=swap">
+<link rel="stylesheet" href="game.css?v=1">
+</head>
+<body>
+<div class="app">
+  <header class="hud">
+    <a id="platform" class="pill" href="../../../index.html">‹</a>
+    <div class="mid"><b id="title"></b><span id="chip"></span></div>
+    <span id="rice" class="pill rice" aria-live="off"></span>
+    <button type="button" id="more" class="pill"></button>
+  </header>
+  <div class="stage">
+    <canvas id="scene" role="img"></canvas>
+    <p id="hint" class="hint"></p>
+  </div>
+  <nav class="bar">
+    <button type="button" data-open="krap"><span class="ico" aria-hidden="true">🙏</span><span class="lbl"></span></button>
+    <button type="button" data-open="offer"><span class="ico" aria-hidden="true">🌼</span><span class="lbl"></span></button>
+    <button type="button" data-open="chant"><span class="ico" aria-hidden="true">📿</span><span class="lbl"></span></button>
+    <button type="button" data-open="alms"><span class="ico" aria-hidden="true">🍚</span><span class="lbl"></span></button>
+    <button type="button" data-open="sweep"><span class="ico" aria-hidden="true">🧹</span><span class="lbl"></span></button>
+    <button type="button" data-open="care"><span class="ico" aria-hidden="true">🐕</span><span class="lbl"></span></button>
+  </nav>
+</div>
+<div id="veil" class="veil" hidden></div>
+<section id="sheet" class="sheet" role="dialog" aria-modal="true" hidden></section>
+<div id="toast" class="toast" role="status" hidden></div>
+<div id="sr" class="sr-only" aria-live="polite"></div>
+
+<script src="../../../core/calendar.js?v=1"></script>
+<script src="../pack.js?v=1"></script>
+<script src="../content.js?v=1"></script>
+<script src="i18n.js?v=1"></script>
+<script src="scene.js?v=1"></script>
+<script src="game.js?v=1"></script>
+<script>TH.boot();</script>
+</body>
+</html>
