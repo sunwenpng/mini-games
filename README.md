@@ -6,6 +6,7 @@
 
 | 目录 | 内容 |
 | :--- | :--- |
+| [`threshold/`](threshold/) | **启扉 / Threshold**：多信仰文化体验平台；汉传佛教包可玩（中文 / English），修行只记录、出坡攒存粮 |
 | [`temple-yard/`](temple-yard/) | 山寺小院：敲木鱼、礼佛、诵经，救助流浪小动物 |
 | [`temple-yard-v4/`](temple-yard-v4/) | 山寺小院 v4：新手引导、目标行、随喜广告、存档备份（原版保留不动） |
 | [`sky-breakout/`](sky-breakout/) | 云霄突围：竖屏 3D 飞机射击 |
