@@ -167,3 +167,26 @@ textarea {
 footer { color: var(--muted); font-size: 12.5px; border-top: 1px solid var(--line); padding-top: 14px; display: grid; gap: 4px; }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/* ---------- 第四阶段：预览确认、节历、显示设置、应用图标 ---------- */
+.s-preview { color: var(--wait); background: var(--wait-soft); }
+.warn-panel { border-inline-start: 3px solid var(--wait); background: var(--wait-soft); }
+.warn-panel p { font-size: 14px; }
+.ack { display: flex; gap: 10px; align-items: flex-start; font-weight: 600; cursor: pointer; }
+.ack input { margin-top: 6px; accent-color: var(--wait); flex: none; width: 18px; height: 18px; }
+.cal h3 { color: var(--muted); font-size: 13.5px; }
+.cal .today { font-weight: 700; color: var(--accent); }
+fieldset.inline { border: 0; padding: 0; margin: 0; display: grid; gap: 4px; }
+fieldset.inline legend { padding: 0; font-size: 14px; }
+.opts.row { display: flex; flex-wrap: wrap; gap: 4px 6px; }
+.opts.row .opt { border-color: var(--line); padding: 6px 12px; align-items: center; }
+.opts.row .opt input { margin-top: 0; }
+.app-icon { width: 72px; height: 72px; display: grid; place-items: center; background: #f4efe6; color: #1f2429; }
+.app-icon.ios { border-radius: 22.5%; box-shadow: 0 1px 3px rgba(0,0,0,.18); }
+.app-icon.circle { border-radius: 50%; }
+.app-icon.squircle { border-radius: 38%; }
+.app-icon.mono { border-radius: 22.5%; background: #2c3138; color: #e8e6e1; }
+.app-icon.mono, .app-icon.print { --logo-light: currentColor; }
+.app-icon.print { border-radius: 4px; background: #fff; color: #000; border: 1px solid #000; filter: grayscale(1); }
+html[data-motion="reduce"] * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+@media (prefers-reduced-motion: reduce) { html[data-motion="full"] * { transition: revert !important; animation: revert !important; } }

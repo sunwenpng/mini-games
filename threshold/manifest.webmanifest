@@ -1,0 +1,16 @@
+{
+  "name": "启扉 Threshold",
+  "short_name": "启扉",
+  "description": "多信仰文化体验平台（内测）/ A multi-faith cultural experience platform (preview)",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f2ee",
+  "theme_color": "#f4f2ee",
+  "icons": [
+    { "src": "brand/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "brand/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "brand/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "brand/logo-a.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
