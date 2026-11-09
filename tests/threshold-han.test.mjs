@@ -7,13 +7,15 @@ import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 
 const DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'threshold', 'traditions', 'buddhism.han', 'game');
-const LIBS = fs.readFileSync(path.join(DIR, 'ad-kit.js'), 'utf8') + '\n' + fs.readFileSync(path.join(DIR, 'i18n-en.js'), 'utf8');
+const LIBS = fs.readFileSync(path.join(DIR, 'ad-kit.js'), 'utf8') + '\n' + fs.readFileSync(path.join(DIR, 'i18n-en.js'), 'utf8') +
+  '\n' + fs.readFileSync(path.join(DIR, 'i18n-zh-TW.js'), 'utf8') + '\n;globalThis.HAN_TW = HAN_TW;';
+const PLATFORM_LIBS = ['core/calendar.js', 'traditions/buddhism.han/pack.js'].map(f => fs.readFileSync(path.join(DIR, '..', '..', '..', f), 'utf8')).join('\n');
 const GAME = fs.readFileSync(path.join(DIR, 'game.js'), 'utf8') +
   '\n;globalThis.__t = { G, get S() { return S; }, get loadNotice() { return loadNotice; }, step, draw, knock, startBow, lightIncense, strikeBell,' +
   ' makeOffer, OFFERS, makeWish, strikeQing, beatDrum, chooseSutra, closeSutra, sutraById, buyGood, GOODS, upgradeTool, hireMonk, toolCost,' +
   ' spawnPile, sweepPile, pileYield, watchSupport, supportReward, writeSave, catchUp, adopt, enterHall, exitHall, spend,' +
   ' L, fmt, wrap, get UI_LANG() { return UI_LANG; }, L_MISSING, spawnStray, feed, pet, treat, openAnimal, openNaming, giveName, showChores,' +
-  ' selectVoiceProfile, SUTRAS, WISH_CATS, toggleAutoSutra };';
+  ' selectVoiceProfile, SUTRAS, WISH_CATS, toggleAutoSutra, toTW, festivalToday };';
 
 function makeCtx() {
   const gradient = { addColorStop() {} };
@@ -46,11 +48,12 @@ function boot({ store = storage(), hash = '', now = 1_800_000_000_000, clock = {
     document: { getElementById: () => el, addEventListener: noop, hidden: false },
     localStorage: store, location: { hash, href: '' }, navigator: {},
     requestAnimationFrame: noop, innerWidth: 390, innerHeight: 844, devicePixelRatio: 2, addEventListener: noop,
-    matchMedia: () => ({ matches: false }), setTimeout, clearTimeout, console, Date: FakeDate, Math, JSON, Object, Promise, Array,
+    matchMedia: () => ({ matches: false }), setTimeout, clearTimeout, console, Date: FakeDate, Math, JSON, Object, Promise, Array, Intl,
   };
   ctx.window = ctx;
   ctx.self = ctx;
   vm.createContext(ctx);
+  vm.runInContext(PLATFORM_LIBS, ctx);
   vm.runInContext(LIBS, ctx);
   vm.runInContext(GAME, ctx);
   return { T: ctx.__t, ctx, store };
@@ -249,4 +252,48 @@ test('游戏里改声线会写回平台存档；平台存档不存在时不新�
   const empty = storage();
   boot({ store: empty }).T.selectVoiceProfile('solemn');
   assert.equal(empty.data['threshold-save-v1'], undefined);
+});
+
+test('繁體中文：平台选 zh-TW 后，界面文字和经文都换成繁体，转换幂等，不残留简体字', () => {
+  const { T, ctx } = boot({ hash: '#ui=zh-TW' });
+  assert.equal(T.UI_LANG, 'zh-TW');
+  const TW = ctx.HAN_TW;
+  /* 词表里有意保留的字（如人名“阿杰”的“杰”）不算残留。 */
+  const kept = new Set(Object.values(TW.phrases).join(''));
+  const simplified = new Set(Object.keys(TW.chars).filter(c => !kept.has(c)));
+  const src = fs.readFileSync(path.join(DIR, 'game.js'), 'utf8');
+  const body = src.slice(0, src.indexOf('const SUTRA_TEXTS')) + src.slice(src.indexOf('const SUTRAS ='));
+  const code = body.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const lits = [...code.matchAll(/'([^'\\\n]*[\u3400-\u9fff][^'\\\n]*)'/g)].map(m => m[1]);
+  assert.ok(lits.length > 300);
+  for (const lit of lits) {
+    const out = T.toTW(lit);
+    assert.equal(T.toTW(out), out, '幂等 ' + lit);
+    const left = [...out].filter(c => simplified.has(c));
+    assert.deepEqual(left, [], lit + ' → ' + out);
+  }
+  assert.equal(T.L('支持我们：看一段广告'), '支持我們：看一段廣告');
+  assert.equal(T.L('山下开面馆的王阿姨'), '山下開麵館的王阿姨');
+  const xin = T.SUTRAS.find(s => s.id === 'xinjing');
+  assert.equal(xin.title, '般若波羅蜜多心經');
+  assert.equal(xin.chars.slice(0, 5).join(''), '觀自在菩薩');
+  for (const su of T.SUTRAS) assert.ok(su.chars.every(c => T.toTW(c) === c), su.id + ' 经文逐字绘制时不会再被改字');
+  T.S.seenIntro = true; T.G.modal = null; T.S.tut = 9;
+  for (const t of ['shop', 'book', 'view', 'audio', 'sutras', 'offer', 'wish']) { T.G.modal = { type: t }; T.draw(); }
+  T.G.modal = null;
+  T.chooseSutra('xinjing'); T.draw();
+  for (let i = 0; i < 20; i++) T.knock('tap');
+  T.draw();
+  T.closeSutra();
+  run(T, 2);
+});
+
+test('节历：佛诞等日子在游戏里有一句提示（英文、繁体也能显示）', () => {
+  const { T } = boot();
+  assert.deepEqual([...T.festivalToday(new Date('2027-05-13T04:00:00Z'))], ['佛诞日']);
+  assert.deepEqual([...T.festivalToday(new Date('2026-11-09T04:00:00Z'))], ['初一']);
+  const en = boot({ hash: '#ui=en' }).T;
+  assert.equal(en.L('今天是佛诞日'), "Today is the Buddha's birthday");
+  const tw = boot({ hash: '#ui=zh-TW' }).T;
+  assert.equal(tw.L('今天是佛诞日、十五'), '今天是佛誕日、十五');
 });

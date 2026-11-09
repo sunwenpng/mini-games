@@ -8,9 +8,11 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'threshold');
 const DATA_FILES = [
-  'locales/zh-CN.js', 'locales/en.js', 'data/registry.js', 'data/script-samples.js',
+  'locales/zh-CN.js', 'locales/zh-TW.js', 'locales/en.js', 'data/registry.js', 'data/script-samples.js',
   'traditions/buddhism.han/pack.js', 'traditions/buddhism.han/content.js',
-  'core/i18n.js', 'core/save.js', 'core/rights.js',
+  'traditions/buddhism.theravada.th/pack.js', 'traditions/buddhism.theravada.th/content.js',
+  'traditions/sikhism.gurdwara/pack.js',
+  'core/i18n.js', 'core/save.js', 'core/rights.js', 'core/calendar.js',
 ];
 
 function boot({ withApp = false, hash = '', storage } = {}) {
@@ -46,12 +48,13 @@ const same = (a, b, m) => assert.deepEqual(plain(a), plain(b), m);
 const stripComments = src => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
 
 /* ---------- 多语言 ---------- */
-test('中英文案 key 完全一致，且都能取到', () => {
+test('简体、繁體、English 文案 key 完全一致，且都能取到', () => {
   const { T } = boot();
   const zh = Object.keys(T.MESSAGES['zh-CN']).sort();
   const en = Object.keys(T.MESSAGES.en).sort();
   same(en, zh);
-  for (const loc of ['zh-CN', 'en', 'qps-ploc', 'qps-plocm']) {
+  same(Object.keys(T.MESSAGES['zh-TW']).sort(), zh);
+  for (const loc of ['zh-CN', 'zh-TW', 'en', 'qps-ploc', 'qps-plocm']) {
     const i = T.createI18n(loc);
     for (const k of zh) assert.ok(!i.t(k, { n: 2, live: 1, name: 'x', place: 'y', voice: 'v', kind: 'k' }).includes('⟦'), loc + ' ' + k);
     assert.equal(i.missing.size, 0);
@@ -80,7 +83,7 @@ test('伪语言：加长至少 30%，保留占位符，RTL 伪语言方向为 rt
 });
 
 test('平台代码里没有写死的中文界面文案', () => {
-  for (const f of ['core/app.js', 'core/i18n.js', 'core/save.js', 'core/rights.js', 'data/registry.js', 'traditions/buddhism.han/pack.js']) {
+  for (const f of ['core/app.js', 'core/i18n.js', 'core/save.js', 'core/rights.js', 'core/calendar.js', 'data/registry.js', 'traditions/buddhism.han/pack.js', 'traditions/buddhism.theravada.th/pack.js']) {
     // 语言自称（endonym）必须用该语言的文字书写，不算界面文案
     const code = stripComments(fs.readFileSync(path.join(ROOT, f), 'utf8')).replace(/endonym: '[^']*'/g, '');
     const hits = code.match(/[一-鿿]+/g) || [];
@@ -89,7 +92,7 @@ test('平台代码里没有写死的中文界面文案', () => {
 });
 
 /* ---------- 注册表与审核门 ---------- */
-test('每个传统和版本都有双语名称，状态合法，只有 live 能进入', () => {
+test('每个传统和版本都有双语名称，状态合法，只有 live 和 preview 能进入，preview 进入前必须确认', () => {
   const { T } = boot();
   const zh = T.MESSAGES['zh-CN'];
   for (const f of T.FAMILIES) {
@@ -98,17 +101,21 @@ test('每个传统和版本都有双语名称，状态合法，只有 live 能�
     for (const v of f.versions) {
       assert.ok(T.STATUSES.includes(v.status), v.id);
       for (const k of ['name', 'place', 'region', 'note']) assert.ok(zh['version.' + v.id + '.' + k], v.id + k);
-      assert.equal(T.canEnter(v.id), v.status === 'live', v.id);
+      assert.equal(T.canEnter(v.id), v.status === 'live' || v.status === 'preview', v.id);
+      assert.equal(T.needsAck(v.id), v.status === 'preview', v.id);
     }
   }
   assert.equal(T.canEnter('islam'), false);
+  assert.equal(T.canEnter('sikhism.gurdwara'), false, '纸面推演包不开放');
+  assert.equal(T.canEnter('buddhism.theravada.th'), true);
   assert.equal(T.canEnter('nope'), false);
 });
 
-test('包的选项都有文案；不可选项都写明原因；默认值可选', () => {
+test('包的选项都有文案；不可选项都写明原因；可进入的包默认值可选', () => {
   const { T } = boot();
   const zh = T.MESSAGES['zh-CN'];
-  const pack = T.PACKS['buddhism.han'];
+  for (const pack of Object.values(T.PACKS)) {
+  const enterable = pack.status === 'live' || pack.status === 'preview';
   for (const [group, opts] of Object.entries(pack.options)) {
     for (const o of opts) {
       if (group === 'ui') assert.ok(T.LOCALES.find(l => l.id === o.id), o.id);
@@ -117,10 +124,13 @@ test('包的选项都有文案；不可选项都写明原因；默认值可选',
       if (o.state === 'off') assert.ok(o.why && zh[o.why], 'why ' + o.id);
     }
     const def = opts.find(o => o.id === pack.defaults[group]);
-    assert.ok(def && def.state !== 'off', 'default ' + group);
+    assert.ok(def && (!enterable || def.state !== 'off'), pack.id + ' default ' + group);
   }
   assert.equal(pack.rules.adsInSacredSpace, false);
   assert.equal(pack.rules.practicesYieldCurrency, false);
+  for (const k of pack.notice || []) assert.ok(zh[k], k);
+  }
+  assert.equal(T.PACKS['buddhism.theravada.th'].rules.noAnimalRelease, true);
 });
 
 test('内容记录字段齐全、分类正确；正式构建会挡住未审校内容', () => {
@@ -132,6 +142,24 @@ test('内容记录字段齐全、分类正确；正式构建会挡住未审校�
   same(types, { xinjing: 'sutra', dabei: 'dharani', wangsheng: 'dharani', jingang: 'gatha', liuzi: 'mantra', nianfo: 'nianfo' });
   assert.equal(T.Rights.releaseFilter(recs).length, 0, '全部仍是自查状态，正式构建不应显示');
   assert.ok(T.Rights.checkContent([{ id: 'x', type: 'sutra', text: { a: 'b' } }]).length >= 3);
+});
+
+test('泰国上座部内容：五段巴利文，泰文字母、拉丁转写和三种译文逐行对齐，全部是草稿', () => {
+  const { T } = boot();
+  const recs = T.CONTENT['buddhism.theravada.th'];
+  same(recs.map(r => r.key), ['namo', 'tisarana', 'pancasila', 'itipiso', 'metta']);
+  same(T.Rights.checkContent(recs), []);
+  for (const r of recs) {
+    const n = r.text['pi-Thai'].length;
+    assert.equal(r.text['pi-Latn'].length, n, r.key);
+    for (const tr of ['th', 'en', 'zh-CN']) assert.equal(r.translations[tr].length, n, r.key + ' ' + tr);
+    assert.ok(r.text['pi-Thai'].every(l => /^[\u0E00-\u0E7F ]+$/.test(l)), r.key + ' 泰文字母');
+    assert.ok(r.text['pi-Latn'].every(l => /^[A-Za-zāīūṃṅñṭḍṇḷĀĪŪÑ’ ]+$/.test(l)), r.key + ' 拉丁转写');
+    assert.equal(r.reviewStatus, 'draft');
+    assert.ok(T.MESSAGES['zh-CN']['type.' + r.type], r.type);
+  }
+  assert.equal(recs[0].text['pi-Thai'].length, 3, '礼敬文念三遍');
+  assert.equal(T.Rights.releaseFilter(recs).length, 0);
 });
 
 test('声音权利链：可选的声音都齐全，自有录音缺材料所以不可选', () => {
@@ -219,7 +247,8 @@ test('写入前留备份；四项选择互相独立；不可选的值被改回�
   same(p, Object.assign({}, base, { ui: 'en' }));
   assert.equal(T.Save.normalizePrefs('buddhism.han', { voice: 'own.xinjing.v1' }).voice, base.voice, '未录制的自有录音不可选');
   assert.equal(T.Save.normalizePrefs('buddhism.han', { translation: 'en' }).translation, 'none');
-  assert.equal(T.Save.normalizePrefs('buddhism.theravada.th', {}), null, '非 live 版本没有包');
+  same(T.Save.normalizePrefs('buddhism.theravada.th', { ui: 'zh-TW', voice: 'own.th.v1' }), { ui: 'th', content: 'pi-Thai', translation: 'none', voice: 'sys.th' }, '泰国包不可选的项回到默认');
+  assert.equal(T.Save.normalizePrefs('nope', {}), null, '不存在的版本没有包');
 });
 
 test('存档码往返一致；改动和乱码会被拦下', () => {
@@ -248,7 +277,8 @@ test('深链接解析与生成互逆', () => {
 
 test('路由：未开放的版本落到筹备页；深链接选择被修正后写入存档', () => {
   const cases = [
-    ['#v=buddhism.theravada.th', 'prep'],
+    ['#v=buddhism.theravada.th', 'pack'],
+    ['#v=sikhism.gurdwara', 'prep'],
     ['#view=pack&v=buddhism.tibetan', 'prep'],
     ['#view=family&f=islam', 'prep'],
     ['#view=family&f=buddhism', 'family'],
@@ -270,4 +300,78 @@ test('路由：未开放的版本落到筹备页；深链接选择被修正后�
   assert.equal(T.app.state.view, 'pack');
   same(T.app.save.prefs['buddhism.han'], { ui: 'en', content: 'lzh', translation: 'none', voice: 'sys.clear' });
   assert.ok(store.data['threshold-save-v1'], '写入了平台存档');
+});
+
+/* ---------- 第四阶段：节历、存档码带游戏进度、显示设置 ---------- */
+test('节历：汉传按农历推算佛诞等日子；泰国用官方日期，佛日标“估算”', () => {
+  const { T } = boot();
+  const han = T.PACKS['buddhism.han'].calendar;
+  const on = (cal, iso, tz) => T.Calendar.observancesOn(cal, new Date(iso + 'T12:00:00' + tz)).map(o => o.id);
+  assert.ok(on(han, '2027-05-13', '+08:00').includes('obs.han.vesak'), '2027 年农历四月初八');
+  assert.ok(on(han, '2026-11-09', '+08:00').includes('obs.han.new'), '农历十月初一');
+  assert.ok(on(han, '2026-12-25', '+08:00').includes('obs.han.amitabha'), '农历十一月十七');
+  same(T.Calendar.lunar(new Date('2026-11-09T12:00:00+08:00'), 'Asia/Shanghai'), { month: 10, day: 1, leap: false });
+  const th = T.PACKS['buddhism.theravada.th'].calendar;
+  assert.ok(on(th, '2027-02-21', '+07:00').includes('obs.th.makha'));
+  assert.ok(on(th, '2027-05-20', '+07:00').includes('obs.th.visakha'));
+  const next = T.Calendar.upcoming(th, new Date('2026-11-09T12:00:00+07:00'), 60, 10);
+  assert.ok(next.length >= 4 && next.every(o => o.id !== 'obs.th.wanPhra' || o.approx), '佛日都是估算');
+  const age = T.Calendar.moonAge(new Date('2026-11-24T14:53:00Z'));
+  assert.ok(Math.abs(age - 14.77) < 1.2, '2026-11-24 满月，月龄 ' + age.toFixed(2));
+});
+
+test('存档码带上各传统的游戏进度；只接受已知的存档键；旧格式照样能读', () => {
+  const { T } = boot();
+  const s = Object.assign(T.Save.fresh(1), { uiLocale: 'zh-TW', acks: { 'buddhism.theravada.th': true }, display: { size: 'xl', motion: 'reduce' } });
+  const packs = { 'threshold-han-save-v1': JSON.stringify({ stores: 42 }), 'threshold-th-save-v1': JSON.stringify({ rice: 7 }) };
+  const code = T.Save.exportCode(s, packs);
+  const keys = ['threshold-han-save-v1', 'threshold-th-save-v1'];
+  const r = T.Save.parseCode(code, 2, keys);
+  same(r.packs, packs);
+  same(r.data.display, { size: 'xl', motion: 'reduce' });
+  assert.equal(r.data.acks['buddhism.theravada.th'], true);
+  assert.equal(r.data.uiLocale, 'zh-TW');
+  const evil = T.Save.exportCode(s, { 'some-other-site-key': '{"x":1}', 'threshold-th-save-v1': 'not json' });
+  same(T.Save.parseCode(evil, 2, keys).packs, {}, '未知键和坏数据都被丢掉');
+  const old = T.Save.parseCode(T.Save.exportCode(s), 2, keys);
+  same(old.packs, {});
+  assert.equal(old.data.uiLocale, 'zh-TW');
+});
+
+test('显示设置：非法值回到默认', () => {
+  const { T } = boot();
+  const m = T.Save.merge({ display: { size: 'huge', motion: 'spin' } }, 1);
+  same(m.display, { size: 'm', motion: 'system' });
+  same(T.Save.fresh(1).acks, {});
+});
+
+test('平台页面：繁體中文界面能完整渲染每个页面，预览版本要先勾选确认', () => {
+  const html = {};
+  const el = id => (html[id] = html[id] || { id, innerHTML: '', textContent: '', hidden: true, setAttribute() {}, querySelector: () => null, focus() {} });
+  const store = memoryStorage();
+  const { T, ctx } = boot({ withApp: true, storage: store, hash: '#view=pack&v=buddhism.theravada.th' });
+  ctx.document.getElementById = el;
+  ctx.document.documentElement = { setAttribute() {}, removeAttribute() {}, style: {} };
+  ctx.document.querySelector = () => null;
+  ctx.scrollTo = () => {};
+  T.app.init();
+  const main = () => html.main.innerHTML;
+  assert.ok(main().includes('data-act="need-ack"'), '没确认时没有进入链接');
+  assert.ok(!main().includes('data-act="enter"'));
+  T.app.save.acks['buddhism.theravada.th'] = true;
+  T.app.render(false);
+  assert.ok(main().includes('data-act="enter"'), '确认后出现进入链接');
+  assert.ok(main().includes('traditions/buddhism.theravada.th/game/index.html#v=buddhism.theravada.th'));
+  T.app.save.uiLocale = 'zh-TW';
+  T.Save.write(store, T.app.save);
+  ctx.location.hash = '#view=home';
+  T.app.init();
+  for (const h of ['#view=home', '#view=family&f=buddhism', '#view=pack&v=buddhism.han', '#view=sources&v=buddhism.han', '#view=sources&v=buddhism.theravada.th', '#view=settings', '#view=brand', '#view=scripts', '#view=family&f=sikhism', '#view=prep&v=sikhism.gurdwara']) {
+    ctx.location.hash = h;
+    T.app.route();
+    T.app.render(false);
+    assert.ok(!main().includes('⟦'), h + ' 缺文案');
+    assert.ok(main().length > 200, h);
+  }
+  assert.equal(T.app.i18n.locale, 'zh-TW');
 });
