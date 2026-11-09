@@ -157,7 +157,16 @@ var HAN_EN = (function () {
   const who = (s, w) => (s.indexOf('这只') === 0 ? 'the ' + w(s.slice(2)) : w(s));
   const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
   const N = '([\\d.]+[kM]?)';
+  const OBS = {
+    '弥勒菩萨圣诞': 'the birthday of Maitreya Bodhisattva', '释迦牟尼佛出家日': "Śākyamuni Buddha's renunciation day",
+    '释迦牟尼佛涅槃日': "Śākyamuni Buddha's parinirvāṇa day", '观世音菩萨圣诞': 'the birthday of Guanyin Bodhisattva',
+    '佛诞日': "the Buddha's birthday", '观世音菩萨成道日': "Guanyin's day of attaining the Way", '盂兰盆节': 'Ullambana',
+    '地藏菩萨圣诞': 'the birthday of Kṣitigarbha Bodhisattva', '观世音菩萨出家日': "Guanyin's renunciation day",
+    '药师佛圣诞': 'the birthday of the Medicine Buddha', '阿弥陀佛圣诞': 'the birthday of Amitābha Buddha',
+    '释迦牟尼佛成道日': "the Buddha's awakening day (Laba)", '初一': 'the new-moon day (1st of the lunar month)', '十五': 'the full-moon day (15th of the lunar month)',
+  };
   const patterns = [
+    [/^今天是(.+)$/, m => 'Today is ' + m[1].split('、').map(x => OBS[x] || x).join(' and ')],
     [/^(\d+) 秒$/, m => m[1] + 's'],
     [new RegExp('^' + N + ' 存粮$'), m => m[1] + ' stores'],
     [new RegExp('^存粮 \\+' + N + '$'), m => 'Stores +' + m[1]],

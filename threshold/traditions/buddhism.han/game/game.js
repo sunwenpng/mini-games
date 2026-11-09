@@ -36,6 +36,7 @@ const L_MISSING = new Set();
 const HAS_CJK = /[㐀-鿿]/;
 
 function L(str) {
+  if (UI_LANG === 'zh-TW' && str != null) return toTW(String(str));
   if (UI_LANG !== 'en' || str == null) return str;
   const s = String(str);
   if (!HAS_CJK.test(s)) return s;
@@ -50,6 +51,30 @@ function L(str) {
   }
   L_MISSING.add(s);
   return s;
+}
+
+/* 繁体中文（台湾）：先按词表最长匹配，再逐字转换（字表见 i18n-zh-TW.js）。转换是幂等的，繁体字不会再变。 */
+function toTW(s) {
+  const D = typeof HAN_TW !== 'undefined' ? HAN_TW : null;
+  if (!D || !HAS_CJK.test(s)) return s;
+  let out = '';
+  let i = 0;
+  while (i < s.length) {
+    let hit = '';
+    for (let n = Math.min(D.maxPhrase, s.length - i); n > 1; n--) {
+      const k = s.substr(i, n);
+      if (Object.prototype.hasOwnProperty.call(D.phrases, k)) { hit = k; break; }
+    }
+    if (hit) {
+      out += D.phrases[hit];
+      i += hit.length;
+    } else {
+      const c = s[i];
+      out += Object.prototype.hasOwnProperty.call(D.chars, c) ? D.chars[c] : c;
+      i += 1;
+    }
+  }
+  return out;
 }
 
 /* 模板里的片段：名字、动物、经名、食物等。 */
@@ -198,7 +223,7 @@ const SUTRA_TEXTS = [
   },
 ];
 
-const SUTRAS = SUTRA_TEXTS.map(def => {
+function buildSutra(def) {
   const chars = [];
   const phrases = [];
   let cur = '';
@@ -215,7 +240,8 @@ const SUTRAS = SUTRA_TEXTS.map(def => {
   }
   if (cur) phrases.push({ start, end: chars.length, text: cur });
   return Object.assign({}, def, { chars, phrases });
-});
+}
+const SUTRAS = SUTRA_TEXTS.map(buildSutra);
 
 function sutraById(id) {
   return SUTRAS.find(s => s.id === id) || SUTRAS[0];
@@ -426,6 +452,18 @@ const PLATFORM_PREFS = readPlatformPrefs();
       document.documentElement.lang = 'en';
       document.title = 'Mountain Temple Yard';
       cv.setAttribute('aria-label', 'Mountain Temple Yard, the Han Chinese Buddhist version of Threshold. Space or Enter taps the wooden fish, M mutes, Esc closes.');
+    } catch (e) { /* 测试环境没有完整的 document */ }
+  }
+  if (PLATFORM_PREFS.ui === 'zh-TW' && typeof HAN_TW !== 'undefined') {
+    UI_LANG = 'zh-TW';
+    /* 经文换成传统写法（逐字对应，字数不变，进度照旧）。 */
+    SUTRAS.forEach((su, i) => {
+      const tw = HAN_TW.sutras[su.id];
+      if (tw && [...tw.text].length === [...SUTRA_TEXTS[i].text].length) Object.assign(su, buildSutra(Object.assign({}, SUTRA_TEXTS[i], tw)));
+    });
+    try {
+      document.documentElement.lang = 'zh-TW';
+      cv.setAttribute('aria-label', toTW(cv.getAttribute('aria-label') || '山寺小院'));
     } catch (e) { /* 测试环境没有完整的 document */ }
   }
   const v = PLATFORM_PREFS.voice;
@@ -5118,6 +5156,24 @@ catchUp();
 if (loadNotice) toast(loadNotice, loadNotice.includes('恢复') ? 'info' : 'warn', 5, 2, 'load_notice');
 if (!S.platformChosen) G.modal = { type: 'versions' };
 else if (!S.seenIntro) G.modal = { type: 'intro' };
+
+/* 节历：今天是佛菩萨纪念日或初一、十五时提示一句（农历按浏览器内置历法，见平台 core/calendar.js）。 */
+const HAN_OBS = {
+  'obs.han.maitreya': '弥勒菩萨圣诞', 'obs.han.renunciation': '释迦牟尼佛出家日', 'obs.han.parinirvana': '释迦牟尼佛涅槃日',
+  'obs.han.guanyinBirth': '观世音菩萨圣诞', 'obs.han.vesak': '佛诞日', 'obs.han.guanyinAwakening': '观世音菩萨成道日',
+  'obs.han.ullambana': '盂兰盆节', 'obs.han.ksitigarbha': '地藏菩萨圣诞', 'obs.han.guanyinRenunciation': '观世音菩萨出家日',
+  'obs.han.bhaisajyaguru': '药师佛圣诞', 'obs.han.amitabha': '阿弥陀佛圣诞', 'obs.han.bodhi': '释迦牟尼佛成道日',
+  'obs.han.new': '初一', 'obs.han.full': '十五',
+};
+function festivalToday(date) {
+  const TT = typeof window !== 'undefined' ? window.Threshold : null;
+  if (!TT || !TT.Calendar || !TT.PACKS || !TT.PACKS['buddhism.han']) return [];
+  return TT.Calendar.observancesOn(TT.PACKS['buddhism.han'].calendar, date || new Date()).map(o => HAN_OBS[o.id]).filter(Boolean);
+}
+setTimeout(() => {
+  const names = festivalToday();
+  if (names.length) toast('今天是' + names.join('、'), 'info', 5, 1, 'festival');
+}, 2500);
 
 let last = 0;
 function loop(t) {
