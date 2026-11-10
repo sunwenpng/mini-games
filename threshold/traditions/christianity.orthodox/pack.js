@@ -1,0 +1,105 @@
+/*
+ * 东正教包（村里的小教堂）：内测预览。画十字（从右肩到左肩）、蜂蜡蜡烛、念珠绳上的耶稣祷文、希腊文短祷，
+ * 复活节（Pascha）按尤利乌斯历推算；固定节日按旧历（俄罗斯、塞尔维亚等教会）。不画圣像的人物，圣像墙只作远景。
+ */
+(function (root) {
+  'use strict';
+  const T = (root.Threshold = root.Threshold || {});
+  const ID = 'christianity.orthodox';
+  T.addPack({
+    id: ID,
+    family: 'christianity',
+    status: 'preview',
+    entry: 'play.html?p=' + ID,
+    saveKeys: ['threshold-orth-save-v1'],
+    options: {
+      ui: [{ id: 'zh-CN', state: 'ok' }, { id: 'en', state: 'draft', why: 'why.draftUi' }],
+      content: [{ id: 'grc', state: 'ok' }, { id: 'grc-latn', state: 'ok' }, { id: 'grc-both', state: 'ok' }],
+      translation: [{ id: 'none', state: 'ok' }, { id: 'zh-CN', state: 'draft', why: 'why.translationDraft' }, { id: 'en', state: 'draft', why: 'why.translationDraft' }],
+      voice: [{ id: 'ref.orth', state: 'ok' }, { id: 'sys.orth', state: 'ok' }],
+    },
+    defaults: { ui: 'zh-CN', content: 'grc-both', translation: 'zh-CN', voice: 'ref.orth' },
+    notice: ['notice.orth.experience', 'notice.orth.calendar', 'notice.orth.etiquette', 'notice.orth.practice'],
+    previewBody: 'preview.body.orth',
+    calendar: {
+      tz: 'Europe/Belgrade',
+      note: 'cal.note.orth',
+      rel: [
+        { id: 'obs.orth.palm', base: 'pascha', offset: -7 }, { id: 'obs.orth.holyFriday', base: 'pascha', offset: -2 },
+        { id: 'obs.orth.pascha', base: 'pascha', offset: 0 }, { id: 'obs.orth.ascension', base: 'pascha', offset: 39 }, { id: 'obs.orth.pentecost', base: 'pascha', offset: 49 },
+      ],
+      yearly: [
+        { id: 'obs.orth.nativity', md: '01-07' }, { id: 'obs.orth.theophany', md: '01-19' }, { id: 'obs.orth.annunciation', md: '04-07' },
+        { id: 'obs.orth.transfiguration', md: '08-19' }, { id: 'obs.orth.dormition', md: '08-28' },
+      ],
+    },
+    review: { advisor: null, nativeReview: { el: null, en: null, 'zh-CN': 'self' }, lastReview: null },
+    rules: { adsInSacredSpace: false, ads: false, practicesYieldCurrency: false, depictions: ['iconostasis-background-only', 'no-icon-figures'], noSacraments: true },
+    voices: {
+      'ref.orth': {
+        kind: 'reference', file: 'audio/orthodox-kyrie.m4a', license: 'CC BY 4.0', performer: 'Aurel von Bismarck (Wikimedia Commons)',
+        sourceUrl: 'https://commons.wikimedia.org/wiki/File:(Aurel_von_Bismarck)_EG_178,9_Kyrie_eleison_(orthodox_Ukraine).mp3',
+      },
+      'sys.orth': { kind: 'system', style: 'greek', tts: { lang: 'el-GR', rate: 0.8 } },
+    },
+  }, {
+    'zh-CN': {
+      'version.christianity.orthodox.name': '东正教 · 村里的小教堂',
+      'version.christianity.orthodox.place': '圆顶小教堂',
+      'version.christianity.orthodox.region': '东欧与巴尔干（东正教会遍及全球）',
+      'version.christianity.orthodox.note': '画十字、蜂蜡蜡烛、念珠绳与耶稣祷文、希腊文短祷',
+      'opt.content.grc': '希腊文',
+      'opt.content.grc-latn': '拉丁字母转写',
+      'opt.content.grc-both': '希腊文 + 转写',
+      'voice.ref.orth': '“主，怜悯”参考录音（乌克兰东正教曲调）',
+      'voice.ref.orth.note': 'CC BY 4.0，Aurel von Bismarck；非本产品录制；只有这一段有录音',
+      'voice.sys.orth': '设备朗读（希腊语语音）',
+      'voice.sys.orth.note': '设备自带的现代希腊语语音，不是教堂诵唱',
+      'notice.orth.experience': '这是文化体验，不代表任何东正教会或修道院，也不承诺任何宗教效果。',
+      'notice.orth.calendar': '这一版按使用旧历（尤利乌斯历）的教会：圣诞节在 1 月 7 日。希腊等教会的固定节日用新历。',
+      'notice.orth.etiquette': '东正教画十字从额头到胸前，再从右肩到左肩；圣像墙只作远景，游戏里不画圣像人物。',
+      'notice.orth.practice': '画十字、点烛、念耶稣祷文只记在功课簿里，不产出任何可花的东西；照顾猫狗用的面包来自打理教堂院子。',
+      'preview.body.orth': '东正教版本由 AI 根据公开资料起草，没有经过神父或学者审核，希腊文也没有经过母语者校对。可能有错，不代表任何教会。',
+      'cal.note.orth': '复活节（Pascha）按尤利乌斯历算法推算后换算成公历；固定节日按旧历教会的公历日期。',
+      'obs.orth.palm': '主进圣城节（圣枝主日）',
+      'obs.orth.holyFriday': '圣大受难日',
+      'obs.orth.pascha': '复活节（Pascha）',
+      'obs.orth.ascension': '主升天节',
+      'obs.orth.pentecost': '圣三主日（五旬节）',
+      'obs.orth.nativity': '圣诞节（旧历）',
+      'obs.orth.theophany': '主领洗节（神显节）',
+      'obs.orth.annunciation': '圣母领报节',
+      'obs.orth.transfiguration': '主显圣容节',
+      'obs.orth.dormition': '圣母安息节',
+    },
+    en: {
+      'version.christianity.orthodox.name': 'Eastern Orthodox Christianity · a village church',
+      'version.christianity.orthodox.place': 'Domed Village Church',
+      'version.christianity.orthodox.region': 'Eastern Europe and the Balkans (Orthodoxy is worldwide)',
+      'version.christianity.orthodox.note': 'The sign of the cross, beeswax candles, the prayer rope and the Jesus Prayer, short Greek prayers',
+      'opt.content.grc': 'Greek',
+      'opt.content.grc-latn': 'Romanized',
+      'opt.content.grc-both': 'Greek + romanized',
+      'voice.ref.orth': 'Kyrie eleison reference recording (Ukrainian Orthodox melody)',
+      'voice.ref.orth.note': 'CC BY 4.0 by Aurel von Bismarck; not recorded by us; only this text has a recording',
+      'voice.sys.orth': 'Device voice (Greek)',
+      'voice.sys.orth.note': 'The device’s modern Greek voice, not church chant',
+      'notice.orth.experience': 'This is a cultural experience. It does not represent any Orthodox church or monastery and promises no spiritual result.',
+      'notice.orth.calendar': 'This version follows churches on the old (Julian) calendar: Christmas on 7 January. Greek and some other churches keep fixed feasts on the new calendar.',
+      'notice.orth.etiquette': 'Orthodox Christians cross themselves forehead to chest, then right shoulder to left. The icon screen is background only; no figures from icons are drawn.',
+      'notice.orth.practice': 'The sign of the cross, candles and the Jesus Prayer are only noted in the practice book and produce nothing to spend. The bread for the cats and dogs comes from tending the churchyard.',
+      'preview.body.orth': 'The Orthodox version was drafted by AI from public sources. No priest or scholar has reviewed it and the Greek has not been checked by a native speaker. It may contain errors and represents no church.',
+      'cal.note.orth': 'Pascha is computed with the Julian algorithm and converted to the Gregorian date; fixed feasts are the Gregorian dates kept by old-calendar churches.',
+      'obs.orth.palm': 'Entry into Jerusalem (Palm Sunday)',
+      'obs.orth.holyFriday': 'Holy and Great Friday',
+      'obs.orth.pascha': 'Pascha (Easter)',
+      'obs.orth.ascension': 'Ascension',
+      'obs.orth.pentecost': 'Pentecost (Trinity Sunday)',
+      'obs.orth.nativity': 'Nativity (old calendar)',
+      'obs.orth.theophany': 'Theophany',
+      'obs.orth.annunciation': 'Annunciation',
+      'obs.orth.transfiguration': 'Transfiguration',
+      'obs.orth.dormition': 'Dormition of the Theotokos',
+    },
+  });
+})(typeof window !== 'undefined' ? window : globalThis);
