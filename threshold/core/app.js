@@ -169,7 +169,7 @@
       <ul class="grid" role="list">
         ${T.FAMILIES.map(f => {
           const st = T.familyStatus(f);
-          const live = f.versions.filter(v => v.status === 'live').length;
+          const live = f.versions.filter(v => T.canEnter(v.id)).length;
           const hash = f.versions.length ? '#view=family&f=' + f.id : '#view=prep&f=' + f.id;
           return `<li><a class="card" href="${hash}">
             <span class="row"><span class="name">${esc(t('family.' + f.id + '.name'))}</span>${badge(st)}</span>
@@ -334,7 +334,7 @@
       ${calendarPanel(pack)}
       ${ackNeeded ? `<section class="panel warn-panel" aria-labelledby="preview-title">
         <h2 id="preview-title">${esc(t('preview.title'))}</h2>
-        <p>${esc(t('preview.body'))}</p>
+        <p>${esc(t(pack.previewBody || 'preview.body'))}</p>
         <label class="ack" for="ack-${esc(id.replace(/\./g, '-'))}"><input type="checkbox" id="ack-${esc(id.replace(/\./g, '-'))}" name="ack" data-version="${esc(id)}" ${acked ? 'checked' : ''}> <span>${esc(t('preview.ack'))}</span></label>
       </section>` : ''}
       <div class="actions">
@@ -419,6 +419,7 @@
       <section class="panel">
         <h2>${esc(t('privacy.title'))}</h2>
         <p class="note">${esc(t('privacy.body'))}</p>
+        <p><a href="legal.html">${esc(t('privacy.link'))}</a></p>
       </section>
       <section class="panel">
         <h2>${esc(t('code.title'))}</h2>
