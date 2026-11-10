@@ -2,8 +2,8 @@
  * 泰国上座部佛教包的诵读内容：泰国在家众常诵的五段巴利文。
  * - 原文：巴利三藏与泰国通行诵本，公有领域。泰文字母写法按泰国诵本常见体例（每个音节带元音，如“นะโม ตัสสะ”），
  *   拉丁转写按国际通行的巴利文转写（带附加符号）。
- * - 译文：泰语用泰国诵本里常见的释义；English 与简体中文由 AI 起草。全部是 draft，需要泰国僧人或学者、
- *   泰语母语者逐行审定后才能升级。
+ * - 译文：泰语用泰国诵本里常见的释义；English 与简体中文由 AI 起草。2026-11-09 编辑自查后为 self-checked，
+ *   仍需泰国僧人或学者、泰语母语者逐行签字后才能升级。
  * 类型：homage 礼敬文 | refuge 三皈依 | precepts 戒文 | recollection 随念 | metta 慈心文
  */
 (function (root) {
@@ -16,14 +16,17 @@
   const NAMO_TR = {
     th: 'ขอนอบน้อมแด่พระผู้มีพระภาคเจ้า ผู้เป็นพระอรหันต์ ตรัสรู้ชอบได้โดยพระองค์เอง',
     en: 'Homage to the Blessed One, the Worthy One, the Perfectly Self-Awakened One.',
-    'zh-CN': '礼敬世尊、阿罗汉、正等正觉者。',
+    'zh-CN': '礼敬彼世尊、阿罗汉、正等正觉者。',
   };
 
   const base = {
     license: 'public-domain-text',
     territory: ['*'],
-    reviewStatus: 'draft',
-    reviewers: [],
+    reviewStatus: 'self-checked',
+    /* 自查记录。self-checked 只表示编辑自查过；native-reviewed / advisor-approved 必须写真人姓名和日期。 */
+    reviewers: [
+      { role: 'editor-selfcheck', by: 'Claude (AI)', date: '2026-11-09', scope: 'Pali Thai-script vs. Latin line by line; Thai translations vs. common Thai chanting books; zh-CN/en wording', report: 'docs/上线材料包_v1/03_泰国包内容自查记录.md' },
+    ],
     titleLang: 'th',
     edition: 'Thai chanting-book orthography (to be matched to an edition by an advisor)',
     editionLang: 'en',
@@ -128,7 +131,7 @@
           '我受持离不与取的学处。',
           '我受持离欲邪行的学处。',
           '我受持离妄语的学处。',
-          '我受持离放逸之因的谷酒、花酒等酒类的学处。',
+          '我受持离谷酒、花酒等令人放逸之因的学处。',
         ],
       },
     }),
@@ -137,7 +140,7 @@
       key: 'itipiso',
       type: 'recollection',
       title: { th: 'อิติปิโส (พุทธคุณ ธรรมคุณ สังฆคุณ)', 'pi-Latn': 'Iti pi so', en: 'Recollection of the Triple Gem', 'zh-CN': '三宝功德（随念）' },
-      source: { id: 'AN 6.10', name: 'Aṅguttara Nikāya 6.10 and parallels' },
+      source: { id: 'AN 6.10', name: 'Aṅguttara Nikāya 6.10 (Mahānāma); also MN 7, SN 11.3' },
       usage: 'th.usage.itipiso',
       text: {
         'pi-Thai': [
@@ -189,7 +192,7 @@
           'สงฆ์สาวกของพระผู้มีพระภาคเจ้า หมู่ใด ปฏิบัติเพื่อรู้ธรรมเป็นเครื่องออกจากทุกข์แล้ว',
           'สงฆ์สาวกของพระผู้มีพระภาคเจ้า หมู่ใด ปฏิบัติสมควรแล้ว',
           'ได้แก่บุคคลเหล่านี้คือ คู่แห่งบุรุษ ๔ คู่ นับเรียงตัวบุรุษได้ ๘ บุรุษ',
-          'นั่นแหละ สงฆ์สาวกของพระผู้มีพระภาคเจ้า',
+          'นั่นแหละคือสงฆ์สาวกของพระผู้มีพระภาคเจ้า',
           'เป็นสงฆ์ควรแก่สักการะที่เขานำมาบูชา เป็นสงฆ์ควรแก่สักการะที่เขาจัดไว้ต้อนรับ เป็นผู้ควรรับทักษิณาทาน เป็นผู้ที่บุคคลทั่วไปควรทำอัญชลี',
           'เป็นเนื้อนาบุญของโลก ไม่มีนาบุญอื่นยิ่งกว่า',
         ],
@@ -221,7 +224,7 @@
           '世尊的弟子僧团是善行道的，',
           '是正直行道的，',
           '是如理行道的，',
-          '是恭敬行道的，',
+          '是和敬行道的，',
           '即四双八辈。',
           '这就是世尊的弟子僧团，',
           '应供、应受款待、应受布施、应合掌礼敬，',
