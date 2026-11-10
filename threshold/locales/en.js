@@ -1,4 +1,4 @@
-/* Platform UI strings: English. Drafted with AI; needs native-speaker review before release. */
+/* Platform UI strings: English. Drafted with AI and self-checked line by line (2026-11-09); still needs a native-speaker sign-off before release. */
 (function (root) {
   'use strict';
   const T = (root.Threshold = root.Threshold || {});
@@ -13,7 +13,7 @@
     'a11y.main': 'Main content',
 
     'status.live': 'Open',
-    'status.next': 'In production next',
+    'status.next': 'Coming next',
     'status.research': 'In research',
     'status.advisory': 'Awaiting advisors',
     'status.planned': 'Planned',
@@ -229,7 +229,7 @@
     'scripts.lead': 'The same card should not overflow or clip in any script, and right-to-left scripts should mirror the whole block. Sample text is not native-reviewed.',
     'scripts.note': 'Check: Thai has no spaces between words but should still break at word boundaries; in Arabic and Hebrew the arrow and mark should mirror.',
 
-    "footer.note": "Preview build. Han Chinese Buddhism is open, Thai Theravada Buddhism is an unreviewed preview, and the other versions are in preparation. Sample text in each script has not been reviewed by native speakers.",
+    "footer.note": "Preview build. Han Chinese Buddhism is open; the other thirteen versions, across ten religious traditions, are unreviewed previews that ask for confirmation before entry. Sample text in each script has not been reviewed by native speakers.",
 
     'toast.saveFailed': 'Your choices were not saved. Make a save code in Settings.',
     'toast.notifyOn': 'Noted. You will be told when it opens (stored on this device only during preview).',
@@ -247,7 +247,7 @@
     "why.translationDraft": "AI-drafted parallel translation; needs advisor and native review",
     "why.latnOnly": "Uses the standard Pali romanization with diacritics",
     "version.sikhism.gurdwara.name": "Sikhism · Gurdwara",
-    "version.sikhism.gurdwara.place": "None yet",
+    "version.sikhism.gurdwara.place": "Not yet",
     "version.sikhism.gurdwara.region": "Punjab · global Sikh community",
     "version.sikhism.gurdwara.note": "Paper walkthrough with the platform interfaces (seva, langar); not built without advisors",
     "preview.title": "This is an unreviewed preview",
@@ -256,7 +256,7 @@
     "preview.needAck": "Please tick the confirmation above first",
     "notice.th.experience": "This is a cultural experience. It does not represent any temple or monastic community and promises no spiritual result.",
     "notice.th.etiquette": "Take off your shoes in the temple and cover shoulders and knees. When seated, do not point your feet at a Buddha image or a monk. Women do not hand things directly to monks.",
-    "notice.th.alms": "Morning alms are open only from 6 to 8 a.m. Kneel, place the rice in the bowl, stay quiet and do not ask for a blessing.",
+    "notice.th.alms": "Morning alms are open only from 6 to 8 a.m. Kneel, place the rice in the bowl, stay quiet and do not touch the monk. If the monks chant a blessing, listen with palms joined.",
     "notice.th.noRelease": "This version has no animal release (buying birds or fish to set free); those animals are often caught to be sold. Caring for the temple dogs and cats is how this place protects life.",
     "notice.th.practice": "Bowing, offering flowers, candles and incense, chanting and giving alms are only noted in the practice book and produce nothing to spend. The rice for the animals comes from sweeping the grounds.",
     "notice.th.voice": "Chanting voice: {voice} ({kind}). Pali is shown in Thai or Latin letters, with an optional translation.",
@@ -272,6 +272,7 @@
     "type.refuge": "Refuges",
     "type.precepts": "Precepts",
     "type.recollection": "Recollection",
+    "type.call": "Call",
     "type.metta": "Loving-kindness",
     "license.public-domain-text": "Source text public domain; translations are AI drafts",
     "src.lines": {"one": "{n} line", "other": "{n} lines"},
@@ -287,7 +288,7 @@
     "cal.tomorrow": "tomorrow",
     "cal.approx": " (estimated)",
     "cal.note.han": "Calculated with the browser’s built-in Chinese lunar calendar (China time); a month whose new moon falls near midnight may be a day off. Temples in different places may keep different dates; follow the local temple. Not yet reviewed by an advisor.",
-    "cal.note.th": "The four major festivals use dates announced by the Thai government. Observance days (wan phra) are estimated from the moon and may be a day off; follow the local temple.",
+    "cal.note.th": "Festivals use dates announced by the Thai government. Observance days (wan phra) in 2026 follow the published Thai calendar; from 2027 they are estimated from the moon and may be a day off. Follow the local temple.",
     "obs.han.maitreya": "Birthday of Maitreya Bodhisattva",
     "obs.han.renunciation": "Śākyamuni Buddha's renunciation",
     "obs.han.parinirvana": "Śākyamuni Buddha's parinirvāṇa",
@@ -318,8 +319,9 @@
     "display.motion.reduce": "Reduce motion",
     "display.motion.full": "Keep motion",
     "display.hint": "Applies to the platform pages and the Thai Theravada version. Mountain Temple Yard follows the system reduce-motion setting.",
+    "privacy.link": "Privacy policy and terms of use",
     "privacy.title": "Privacy",
-    "privacy.body": "No account, no personal data collected, no save uploaded. All choices and game progress stay in this browser on this device. Ads are simulated and make no network calls. Clearing browser data deletes your saves, so make a save code first.",
+    "privacy.body": "No account. We collect no personal data and upload no saves. All choices and game progress stay in this browser on this device. Ads are simulated and make no network calls. The site is hosted on GitHub Pages and fonts come from Google Fonts; like any website, they see your network address. Some browsers send text to the browser maker’s servers to synthesise speech. Clearing browser data deletes your saves, so make a save code first. See the privacy policy for details.",
     "code.summaryPacks": {"one": "Holds choices for {n} version and {g} game save(s). Confirm to replace the matching saves on this device.", "other": "Holds choices for {n} versions and {g} game save(s). Confirm to replace the matching saves on this device."},
     "brand.icons": "App icons and print",
     "brand.iconsNote": "The same mark must still read as a door and a light under the iOS rounded mask, Android adaptive masks (circle and squircle), monochrome themes and black-and-white print.",
