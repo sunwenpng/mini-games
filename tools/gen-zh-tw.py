@@ -7,7 +7,9 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'threshold
 GAME = ROOT + '/traditions/buddhism.han/game/game.js'
 PKG = os.path.dirname(__import__('opencc').__file__) + '/dictionary/'
 _TWP = OpenCC('s2twp')
-FIX = [('稽核', '審核'), ('影象', '圖像'), ('支援我們', '支持我們'), ('程式設計師', '程式設計師')]
+FIX = [('稽核', '審核'), ('影象', '圖像'), ('支援我們', '支持我們'), ('程式設計師', '程式設計師'),
+       # 2026-11-09 審校：佛教用語與台灣慣用寫法
+       ('佈施', '布施'), ('唸佛', '念佛'), ('唸經', '念經'), ('唸到', '念到'), ('賬號', '帳號')]
 class _Fixed:
     def convert(self, s):
         v = _TWP.convert(s)
@@ -28,11 +30,14 @@ def load_dict(name):
     return out
 
 # ---------- 平台文案 ----------
+# 各传统包用 T.addPack 并入的平台文案（版本名、选项、须知、节日）也一起转换。
+import glob
+PACK_FILES = sorted(glob.glob(ROOT + '/traditions/*/pack.js'))
 def platform():
     js = subprocess.run(['node', '-e', '''
 const vm=require("vm"),fs=require("fs");const c={};c.window=c;vm.createContext(c);
-vm.runInContext(fs.readFileSync(process.argv[1],"utf8"),c);
-process.stdout.write(JSON.stringify(c.Threshold.MESSAGES["zh-CN"]));''', ROOT + '/locales/zh-CN.js'],
+for (const f of process.argv.slice(1)) vm.runInContext(fs.readFileSync(f,"utf8"),c);
+process.stdout.write(JSON.stringify(c.Threshold.MESSAGES["zh-CN"]));''', ROOT + '/locales/zh-CN.js', ROOT + '/data/registry.js'] + PACK_FILES,
         capture_output=True, text=True, check=True).stdout
     zh = json.loads(js)
     tw = {}
