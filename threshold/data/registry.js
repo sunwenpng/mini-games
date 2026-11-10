@@ -18,25 +18,34 @@
       versions: [
         { id: 'buddhism.han', status: 'live', pack: 'buddhism.han', prep: { advisor: false, native: true, sources: true, audio: false, layout: true } },
         { id: 'buddhism.theravada.th', status: 'preview', pack: 'buddhism.theravada.th', prep: { advisor: false, native: false, sources: true, audio: false, layout: true } },
-        { id: 'buddhism.tibetan', status: 'research', prep: {} },
-        { id: 'buddhism.japan', status: 'research', prep: {} },
-        { id: 'buddhism.india.navayana', status: 'research', prep: {} },
+        { id: 'buddhism.tibetan', status: 'preview', pack: 'buddhism.tibetan', prep: { advisor: false, native: false, sources: true, audio: false, layout: true } },
+        { id: 'buddhism.japan', status: 'preview', pack: 'buddhism.japan', prep: { advisor: false, native: false, sources: true, audio: false, layout: true } },
+        { id: 'buddhism.india.navayana', status: 'preview', pack: 'buddhism.india.navayana', prep: { advisor: false, native: false, sources: true, audio: false, layout: true } },
       ],
     },
-    { id: 'hinduism', status: 'research', versions: [] },
-    { id: 'christianity', status: 'research', versions: [] },
+    { id: 'hinduism', status: 'research', versions: [{ id: 'hinduism.ghat', status: 'preview', pack: 'hinduism.ghat', prep: { advisor: false, native: false, sources: true, audio: false, layout: true } }] },
+    {
+      id: 'christianity',
+      status: 'research',
+      versions: [
+        { id: 'christianity.catholic', status: 'preview', pack: 'christianity.catholic', prep: { advisor: false, native: false, sources: true, audio: false, layout: true } },
+        { id: 'christianity.orthodox', status: 'preview', pack: 'christianity.orthodox', prep: { advisor: false, native: false, sources: true, audio: false, layout: true } },
+        { id: 'christianity.protestant', status: 'preview', pack: 'christianity.protestant', prep: { advisor: false, native: false, sources: true, audio: false, layout: true } },
+      ],
+    },
     {
       id: 'sikhism',
       status: 'research',
       versions: [
-        /* 纸面推演：pack.js 用平台接口描述了这个传统，但没有顾问前不开放（status 不是 live/preview）。 */
-        { id: 'sikhism.gurdwara', status: 'research', pack: 'sikhism.gurdwara', prep: { advisor: false, native: false, sources: false, audio: false, layout: false } },
+        /* 由纸面推演转为内测预览（2026-11-09）。 */
+        { id: 'sikhism.gurdwara', status: 'preview', pack: 'sikhism.gurdwara', prep: { advisor: false, native: false, sources: true, audio: false, layout: true } },
       ],
     },
-    { id: 'daoism', status: 'research', versions: [] },
-    { id: 'shinto', status: 'research', versions: [] },
-    { id: 'islam', status: 'advisory', versions: [], rtl: true, knowledgeOnly: true },
-    { id: 'judaism', status: 'advisory', versions: [], rtl: true, knowledgeOnly: true },
+    { id: 'daoism', status: 'research', versions: [{ id: 'daoism.mountain', status: 'preview', pack: 'daoism.mountain', prep: { advisor: false, native: false, sources: true, audio: false, layout: true } }] },
+    { id: 'shinto', status: 'research', versions: [{ id: 'shinto.shrine', status: 'preview', pack: 'shinto.shrine', prep: { advisor: false, native: false, sources: true, audio: false, layout: true } }] },
+    /* 伊斯兰教、犹太教：只做知识与文化（不模拟礼拜和仪式），从右往左排版。 */
+    { id: 'islam', status: 'advisory', versions: [{ id: 'islam.mosque', status: 'preview', pack: 'islam.mosque', prep: { advisor: false, native: false, sources: true, audio: false, layout: true } }], rtl: true, knowledgeOnly: true },
+    { id: 'judaism', status: 'advisory', versions: [{ id: 'judaism.shabbat', status: 'preview', pack: 'judaism.shabbat', prep: { advisor: false, native: false, sources: true, audio: false, layout: true } }], rtl: true, knowledgeOnly: true },
   ];
 
   /*
@@ -77,6 +86,22 @@
   T.canEnter = function (versionId) {
     const hit = T.findVersion(versionId);
     return !!(hit && (hit.version.status === 'live' || hit.version.status === 'preview') && hit.version.pack && T.PACKS && T.PACKS[hit.version.pack]);
+  };
+
+  /*
+   * 注册一个传统包，同时并入它在平台页面上要用的文案（名称、选项、须知、节日）。
+   * 包的文案覆盖 locales 里的同名 key（例如原先写着“暂无”的版本名）。zh-TW 由 tools/gen-zh-tw.py 统一生成。
+   */
+  T.addPack = function (pack, msg) {
+    T.PACKS = T.PACKS || {};
+    T.PACKS[pack.id] = pack;
+    T.MESSAGES = T.MESSAGES || {};
+    Object.keys(msg || {}).forEach(lang => {
+      T.MESSAGES[lang] = T.MESSAGES[lang] || {};
+      Object.assign(T.MESSAGES[lang], msg[lang]);
+    });
+    if (pack.voices) { T.VOICES = T.VOICES || {}; Object.assign(T.VOICES, pack.voices); }
+    return pack;
   };
 
   /* 预览版本进入前必须由用户确认“知道未经审核”。 */
