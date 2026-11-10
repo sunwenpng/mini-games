@@ -95,5 +95,7 @@ legend { font-weight: 700; font-size: 14px; padding: 0; margin-bottom: 2px; }
   position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(76px + env(safe-area-inset-bottom, 0px)); z-index: 6;
   width: min(520px, calc(100% - 24px)); background: rgba(31,36,32,.94); color: #f6f1e4; padding: 9px 14px; border-radius: 10px; font-size: 14px;
 }
+/* 面板打开时，提示条移到顶部，不挡住面板里的按钮（真机测试发现“拜下”被挡）。 */
+.sheet:not([hidden]) ~ .toast { top: calc(58px + env(safe-area-inset-top, 0px)); bottom: auto; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }

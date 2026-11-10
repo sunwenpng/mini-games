@@ -9,8 +9,10 @@
 <link rel="icon" href="../../../brand/logo-a.svg" type="image/svg+xml">
 <link rel="manifest" href="../../../manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600&family=Noto+Serif+Thai:wght@500;700&family=Noto+Sans+SC:wght@400;600&display=swap">
-<link rel="stylesheet" href="game.css?v=1">
+<!-- 网络字体不阻塞首屏：在中国大陆 fonts.googleapis.com 常常打不开，阻塞式加载会让页面白屏到超时。打不开时用系统字体。 -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600&family=Noto+Serif+Thai:wght@500;700&family=Noto+Sans+SC:wght@400;600&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600&family=Noto+Serif+Thai:wght@500;700&family=Noto+Sans+SC:wght@400;600&display=swap"></noscript>
+<link rel="stylesheet" href="game.css?v=2">
 </head>
 <body>
 <div class="app">
@@ -38,12 +40,12 @@
 <div id="toast" class="toast" role="status" hidden></div>
 <div id="sr" class="sr-only" aria-live="polite"></div>
 
-<script src="../../../core/calendar.js?v=1"></script>
-<script src="../pack.js?v=1"></script>
-<script src="../content.js?v=1"></script>
-<script src="i18n.js?v=1"></script>
-<script src="scene.js?v=1"></script>
-<script src="game.js?v=1"></script>
+<script src="../../../core/calendar.js?v=2"></script>
+<script src="../pack.js?v=2"></script>
+<script src="../content.js?v=2"></script>
+<script src="i18n.js?v=2"></script>
+<script src="scene.js?v=2"></script>
+<script src="game.js?v=2"></script>
 <script>TH.boot();</script>
 </body>
 </html>
