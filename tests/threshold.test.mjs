@@ -11,7 +11,18 @@ const DATA_FILES = [
   'locales/zh-CN.js', 'locales/zh-TW.js', 'locales/en.js', 'data/registry.js', 'data/script-samples.js',
   'traditions/buddhism.han/pack.js', 'traditions/buddhism.han/content.js',
   'traditions/buddhism.theravada.th/pack.js', 'traditions/buddhism.theravada.th/content.js',
-  'traditions/sikhism.gurdwara/pack.js',
+  'traditions/sikhism.gurdwara/pack.js', 'traditions/sikhism.gurdwara/content.js',
+  'traditions/buddhism.tibetan/pack.js', 'traditions/buddhism.tibetan/content.js',
+  'traditions/buddhism.japan/pack.js', 'traditions/buddhism.japan/content.js',
+  'traditions/buddhism.india.navayana/pack.js', 'traditions/buddhism.india.navayana/content.js',
+  'traditions/hinduism.ghat/pack.js', 'traditions/hinduism.ghat/content.js',
+  'traditions/daoism.mountain/pack.js', 'traditions/daoism.mountain/content.js',
+  'traditions/shinto.shrine/pack.js', 'traditions/shinto.shrine/content.js',
+  'traditions/christianity.catholic/pack.js', 'traditions/christianity.catholic/content.js',
+  'traditions/christianity.orthodox/pack.js', 'traditions/christianity.orthodox/content.js',
+  'traditions/christianity.protestant/pack.js', 'traditions/christianity.protestant/content.js',
+  'traditions/islam.mosque/pack.js', 'traditions/islam.mosque/content.js',
+  'traditions/judaism.shabbat/pack.js', 'traditions/judaism.shabbat/content.js',
   'core/i18n.js', 'core/save.js', 'core/rights.js', 'core/calendar.js',
 ];
 
@@ -106,7 +117,10 @@ test('每个传统和版本都有双语名称，状态合法，只有 live 和 p
     }
   }
   assert.equal(T.canEnter('islam'), false);
-  assert.equal(T.canEnter('sikhism.gurdwara'), false, '纸面推演包不开放');
+  assert.equal(T.canEnter('sikhism.gurdwara'), true, '锡克教由纸面推演转为预览');
+  const all = T.FAMILIES.flatMap(f => f.versions);
+  assert.equal(all.length, 14, '十个传统、十四个版本');
+  assert.ok(T.FAMILIES.every(f => f.versions.length && f.versions.every(v => T.canEnter(v.id))), '每个传统都至少有一个能进入的版本');
   assert.equal(T.canEnter('buddhism.theravada.th'), true);
   assert.equal(T.canEnter('nope'), false);
 });
@@ -144,7 +158,7 @@ test('内容记录字段齐全、分类正确；正式构建会挡住未审校�
   assert.ok(T.Rights.checkContent([{ id: 'x', type: 'sutra', text: { a: 'b' } }]).length >= 3);
 });
 
-test('泰国上座部内容：五段巴利文，泰文字母、拉丁转写和三种译文逐行对齐，全部是草稿', () => {
+test('泰国上座部内容：五段巴利文，泰文字母、拉丁转写和三种译文逐行对齐，编辑自查过但未经母语与顾问审定', () => {
   const { T } = boot();
   const recs = T.CONTENT['buddhism.theravada.th'];
   same(recs.map(r => r.key), ['namo', 'tisarana', 'pancasila', 'itipiso', 'metta']);
@@ -155,7 +169,8 @@ test('泰国上座部内容：五段巴利文，泰文字母、拉丁转写和�
     for (const tr of ['th', 'en', 'zh-CN']) assert.equal(r.translations[tr].length, n, r.key + ' ' + tr);
     assert.ok(r.text['pi-Thai'].every(l => /^[\u0E00-\u0E7F ]+$/.test(l)), r.key + ' 泰文字母');
     assert.ok(r.text['pi-Latn'].every(l => /^[A-Za-zāīūṃṅñṭḍṇḷĀĪŪÑ’ ]+$/.test(l)), r.key + ' 拉丁转写');
-    assert.equal(r.reviewStatus, 'draft');
+    assert.equal(r.reviewStatus, 'self-checked');
+    assert.ok(r.reviewers.length && r.reviewers.every(x => x.by && x.date), r.key + ' 自查记录');
     assert.ok(T.MESSAGES['zh-CN']['type.' + r.type], r.type);
   }
   assert.equal(recs[0].text['pi-Thai'].length, 3, '礼敬文念三遍');
@@ -278,9 +293,10 @@ test('深链接解析与生成互逆', () => {
 test('路由：未开放的版本落到筹备页；深链接选择被修正后写入存档', () => {
   const cases = [
     ['#v=buddhism.theravada.th', 'pack'],
-    ['#v=sikhism.gurdwara', 'prep'],
-    ['#view=pack&v=buddhism.tibetan', 'prep'],
-    ['#view=family&f=islam', 'prep'],
+    ['#v=sikhism.gurdwara', 'pack'],
+    ['#view=pack&v=buddhism.tibetan', 'pack'],
+    ['#view=family&f=islam', 'family'],
+    ['#view=pack&v=nope', 'home'],
     ['#view=family&f=buddhism', 'family'],
     ['#v=bogus.version', 'home'],
     ['#view=sources&v=buddhism.han', 'sources'],
@@ -303,7 +319,7 @@ test('路由：未开放的版本落到筹备页；深链接选择被修正后�
 });
 
 /* ---------- 第四阶段：节历、存档码带游戏进度、显示设置 ---------- */
-test('节历：汉传按农历推算佛诞等日子；泰国用官方日期，佛日标“估算”', () => {
+test('节历：汉传按农历推算佛诞等日子；泰国用官方日期，2026 年佛日按年历、之后标“估算”', () => {
   const { T } = boot();
   const han = T.PACKS['buddhism.han'].calendar;
   const on = (cal, iso, tz) => T.Calendar.observancesOn(cal, new Date(iso + 'T12:00:00' + tz)).map(o => o.id);
@@ -315,7 +331,12 @@ test('节历：汉传按农历推算佛诞等日子；泰国用官方日期，�
   assert.ok(on(th, '2027-02-21', '+07:00').includes('obs.th.makha'));
   assert.ok(on(th, '2027-05-20', '+07:00').includes('obs.th.visakha'));
   const next = T.Calendar.upcoming(th, new Date('2026-11-09T12:00:00+07:00'), 60, 10);
-  assert.ok(next.length >= 4 && next.every(o => o.id !== 'obs.th.wanPhra' || o.approx), '佛日都是估算');
+  assert.ok(next.length >= 4, '60 天内有节日');
+  assert.ok(next.filter(o => o.id === 'obs.th.wanPhra' && o.date < '2027-01-01').every(o => !o.approx), '2026 年佛日按年历，不是估算');
+  assert.ok(next.filter(o => o.id === 'obs.th.wanPhra' && o.date >= '2027-01-01').every(o => o.approx), '2027 年起佛日标估算');
+  same(next.filter(o => o.id === 'obs.th.wanPhra').map(o => o.date).filter(d => d < '2026-12-31'), ['2026-11-09', '2026-11-17', '2026-11-24', '2026-12-02', '2026-12-09', '2026-12-17', '2026-12-24']);
+  assert.equal(th.wanPhra.length, 50, '2569 年 50 个佛日');
+  assert.ok(!on(th, '2026-11-10', '+07:00').includes('obs.th.wanPhra'), '2026-11-10 不是佛日（估算法会误报处）');
   const age = T.Calendar.moonAge(new Date('2026-11-24T14:53:00Z'));
   assert.ok(Math.abs(age - 14.77) < 1.2, '2026-11-24 满月，月龄 ' + age.toFixed(2));
 });
