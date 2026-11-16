@@ -190,3 +190,12 @@ fieldset.inline legend { padding: 0; font-size: 14px; }
 .app-icon.print { border-radius: 4px; background: #fff; color: #000; border: 1px solid #000; filter: grayscale(1); }
 html[data-motion="reduce"] * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 @media (prefers-reduced-motion: reduce) { html[data-motion="full"] * { transition: revert !important; animation: revert !important; } }
+
+/* v2：内测预览确认窗（替代页面底部的勾选框，避免“进不去”） */
+.ack-modal { position: fixed; inset: 0; z-index: 40; display: flex; align-items: flex-end; justify-content: center; background: rgba(10,12,11,.5); opacity: 0; transition: opacity .25s ease; }
+.ack-modal.in { opacity: 1; }
+.ack-card { width: min(560px, 100%); background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 22px 22px 0 0; padding: 20px 18px calc(20px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 10px; box-shadow: 0 -10px 40px rgba(0,0,0,.35); transform: translateY(30px); transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+.ack-modal.in .ack-card { transform: none; }
+.ack-card h2 { margin: 0; }
+.ack-card p { margin: 0; }
+@media (prefers-reduced-motion: reduce) { .ack-modal, .ack-card { transition: none; } }

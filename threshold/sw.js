@@ -2,7 +2,7 @@
  * 离线缓存：网络优先，断网时用缓存。只缓存本站（同源）的 GET 请求。
  * 网络优先意味着在线时永远拿到最新版本，不会因为缓存卡在旧版本。
  */
-const CACHE = 'threshold-v6';
+const CACHE = 'threshold-v11';
 const CORE = [
   './', './index.html', './legal.html', './styles.css', './manifest.webmanifest',
   './brand/logo-a.svg', './brand/icon-192.png', './brand/icon-512.png',
@@ -29,6 +29,23 @@ const CORE = [
   './traditions/christianity.protestant/pack.js', './traditions/christianity.protestant/content.js', './traditions/christianity.protestant/game.js',
   './traditions/islam.mosque/pack.js', './traditions/islam.mosque/content.js', './traditions/islam.mosque/game.js',
   './traditions/judaism.shabbat/pack.js', './traditions/judaism.shabbat/content.js', './traditions/judaism.shabbat/game.js',
+  /* v2：殿内视图与润色（照片不预缓存，看过的会按网络优先策略存进缓存） */
+  './play2.html', './core/courtyard2/ui.js', './core/courtyard2/polish.js', './core/courtyard2/scene2.js', './core/courtyard2/courtyard2.css', './core/hall/hallview.js', './core/hall/toon.js', './core/hall/toon2.js', './core/hall/rite.js', './core/hall/rite2.js', './core/hall/hallview.css',
+  './traditions/buddhism.han/game-v2/index.html', './traditions/buddhism.han/game-v2/game.js', './traditions/buddhism.theravada.th/game-v2/index.html', './traditions/buddhism.theravada.th/game-v2/hall-bridge.js',
+  './traditions/buddhism.han/hall.js',
+  './traditions/buddhism.theravada.th/hall.js',
+  './traditions/buddhism.tibetan/hall.js',
+  './traditions/buddhism.japan/hall.js',
+  './traditions/buddhism.india.navayana/hall.js',
+  './traditions/hinduism.ghat/hall.js',
+  './traditions/sikhism.gurdwara/hall.js',
+  './traditions/daoism.mountain/hall.js',
+  './traditions/shinto.shrine/hall.js',
+  './traditions/christianity.catholic/hall.js',
+  './traditions/christianity.orthodox/hall.js',
+  './traditions/christianity.protestant/hall.js',
+  './traditions/islam.mosque/hall.js',
+  './traditions/judaism.shabbat/hall.js',
 ];
 
 self.addEventListener('install', e => {

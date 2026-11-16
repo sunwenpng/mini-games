@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1d2a26">
+<title>启扉</title>
+<link rel="icon" href="brand/logo-a.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="core/courtyard/courtyard.css?v=4">
+<link rel="stylesheet" href="core/courtyard2/courtyard2.css?v=5">
+<link rel="stylesheet" href="core/hall/hallview.css?v=7">
+</head>
+<body>
+<div class="app">
+  <header class="hud">
+    <a id="platform" class="pill" href="index.html">‹</a>
+    <div class="mid"><b id="title"></b><span id="chip"></span></div>
+    <span id="res" class="pill res" aria-live="off"></span>
+    <button type="button" id="more" class="pill"></button>
+  </header>
+  <div class="stage">
+    <canvas id="scene" role="img"></canvas>
+    <p id="hint" class="hint"></p>
+    <button type="button" id="enter" class="enter-chip" hidden></button>
+  </div>
+  <nav id="bar" class="bar"></nav>
+</div>
+<div id="veil" class="veil" hidden></div>
+<section id="sheet" class="sheet" role="dialog" aria-modal="true" hidden></section>
+<div id="toast" class="toast" role="status" hidden></div>
+<div id="sr" class="sr-only" aria-live="polite"></div>
+<script>
+/* 统一入口 v2：?p=传统包 id。旧入口 play.html 保留不动。v2 增加殿内视图、场景润色和界面动画。 */
+(function () {
+  var PACKS = ['buddhism.tibetan', 'buddhism.japan', 'buddhism.india.navayana', 'hinduism.ghat', 'sikhism.gurdwara', 'daoism.mountain',
+    'shinto.shrine', 'christianity.catholic', 'christianity.orthodox', 'christianity.protestant', 'islam.mosque', 'judaism.shabbat'];
+  var id = (location.search.match(/[?&]p=([\w.]+)/) || [])[1];
+  if (PACKS.indexOf(id) < 0) { location.replace('index.html'); return; }
+  var V = "?v=8";
+  var files = ['core/calendar.js', 'data/registry.js', 'traditions/' + id + '/pack.js', 'traditions/' + id + '/content.js', 'core/courtyard/i18n.js',
+    'core/courtyard/kit.js', 'core/courtyard2/polish.js', 'core/courtyard2/scene2.js', 'core/courtyard/engine.js', 'core/courtyard2/ui.js', 'core/hall/hallview.js', 'core/hall/toon.js', 'core/hall/toon2.js', 'core/hall/rite.js', 'core/hall/rite2.js',
+    'traditions/' + id + '/game.js', 'traditions/' + id + '/hall.js'];
+  /* 重画过建筑的版本：再加载它的 scene2.js（登记到 CourtyardScene2，庭院 v2 优先用它） */
+  var REDRAWN = ['christianity.catholic', 'christianity.orthodox', 'christianity.protestant'];
+  if (REDRAWN.indexOf(id) >= 0) files.push('traditions/' + id + '/scene2.js');
+  (function next(i) {
+    if (i >= files.length) { Courtyard.boot(); return; }
+    var s = document.createElement('script');
+    s.src = files[i] + V;
+    s.onload = function () { next(i + 1); };
+    s.onerror = function () { document.body.insertAdjacentHTML('beforeend', '<p style="color:#fff;padding:16px">Failed to load ' + files[i] + '</p>'); };
+    document.body.appendChild(s);
+  })(0);
+})();
+</script>
+</body>
+</html>
