@@ -32,7 +32,7 @@
       },
     }),
     rec({
-      id: 'christianity.catholic.gloria', key: 'gloria', type: 'prayer',
+      id: 'christianity.catholic.gloria', key: 'gloria', audio: 'ref.la.gloria', type: 'prayer',
       title: { 'zh-CN': '圣三光荣经（Gloria Patri）', en: 'Glory Be (Gloria Patri)' },
       edition: 'Latin liturgical text', source: { id: 'Gloria Patri', name: 'Doxology, Latin liturgical text' },
       text: { orig: ['Gloria Patri, et Filio, et Spiritui Sancto.', 'Sicut erat in principio, et nunc, et semper,', 'et in saecula saeculorum. Amen.'] },

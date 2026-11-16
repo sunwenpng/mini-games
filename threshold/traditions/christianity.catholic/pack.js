@@ -10,7 +10,7 @@
     id: ID,
     family: 'christianity',
     status: 'preview',
-    entry: 'play.html?p=' + ID,
+    entry: 'play2.html?p=' + ID,
     saveKeys: ['threshold-cath-save-v1'],
     options: {
       ui: [{ id: 'zh-CN', state: 'ok' }, { id: 'en', state: 'draft', why: 'why.draftUi' }],
@@ -37,6 +37,10 @@
     review: { advisor: null, nativeReview: { la: null, en: null, 'zh-CN': 'self' }, lastReview: null },
     rules: { adsInSacredSpace: false, ads: false, practicesYieldCurrency: false, depictions: ['no-images-of-christ-or-saints'], noSacraments: true },
     voices: {
+      'ref.la.gloria': {
+        kind: 'reference', file: 'audio/catholic-gloria-patri.m4a', license: 'CC BY-SA 3.0', performer: 'Schola Gregoriana, Pallottine Seminary Ołtarzew (Wikimedia Commons)',
+        sourceUrl: 'https://commons.wikimedia.org/wiki/File:Schola_Gregoriana-Deus_in_adjutorium_meum_intende.ogg',
+      },
       'ref.la': {
         kind: 'reference', file: 'audio/catholic-ave-maria.m4a', license: 'CC BY-SA 3.0', performer: 'Schola Gregoriana (Wikimedia Commons)',
         sourceUrl: 'https://commons.wikimedia.org/wiki/File:Schola_Gregoriana-Ave_Maria.ogg',
