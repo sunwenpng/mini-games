@@ -11,7 +11,7 @@
     id: ID,
     family: 'buddhism',
     status: 'preview',
-    entry: 'play.html?p=' + ID,
+    entry: 'play2.html?p=' + ID,
     saveKeys: ['threshold-nv-save-v1'],
     options: {
       ui: [{ id: 'zh-CN', state: 'ok' }, { id: 'en', state: 'draft', why: 'why.draftUi' }],
@@ -39,6 +39,10 @@
     review: { advisor: null, nativeReview: { mr: null, en: null, 'zh-CN': 'self' }, lastReview: null },
     rules: { adsInSacredSpace: false, ads: false, practicesYieldCurrency: false, depictions: ['no-portraits'] },
     voices: {
+      'ref.nv.panch': {
+        kind: 'reference', file: 'audio/navayana-refuges-precepts.m4a', license: 'Public domain', performer: 'palichanting.org (Internet Archive)',
+        sourceUrl: 'https://archive.org/details/three-refuges-and-five-precepts',
+      },
       'ref.nv': {
         kind: 'reference', file: 'audio/navayana-buddham-saranam.m4a', license: 'CC0', performer: 'Hariharan (Wikimedia Commons)',
         sourceUrl: 'https://commons.wikimedia.org/wiki/File:Buddham_Saranam_Gacchami_-_Male_Voice,_with_Female_Chorus.oga',

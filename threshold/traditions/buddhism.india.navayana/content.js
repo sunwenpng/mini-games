@@ -30,7 +30,7 @@
       },
     }),
     rec({
-      id: 'buddhism.india.navayana.panchshil', key: 'panchshil', type: 'precepts',
+      id: 'buddhism.india.navayana.panchshil', key: 'panchshil', audio: 'ref.nv.panch', type: 'precepts',
       title: { 'zh-CN': '五戒（Panchshil）', en: 'The Five Precepts (Panchshil)' },
       edition: 'Common Navayana vandana books', source: { id: 'Khp 2', name: 'Khuddakapāṭha 2, first five' },
       text: {
