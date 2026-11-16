@@ -22,7 +22,13 @@
 | `islam-adhan.m4a` | 伊斯兰教 · 宣礼 | Aishatu98 | CC0 | https://commons.wikimedia.org/wiki/File:Adhan.ogg |
 | `judaism-shema.m4a` | 犹太教 · 示玛 | J-J Tilsen | CC0 | https://commons.wikimedia.org/wiki/File:Shema1j.ogg |
 | `judaism-shofar.m4a` | 犹太教 · 羊角号四种吹法 | Tfursten | CC BY-SA 3.0 | https://commons.wikimedia.org/wiki/File:4_sjofar_tonen.ogg |
+| `catholic-gloria-patri.m4a` | 天主教 · 圣三光荣经（晚祷开端“天主，求你快来救我”，其中唱了整段 Gloria Patri） | Schola Gregoriana（Ołtarzew 帕洛廷修会修院） | CC BY-SA 3.0 | https://commons.wikimedia.org/wiki/File:Schola_Gregoriana-Deus_in_adjutorium_meum_intende.ogg |
+| `islam-fatiha.m4a` | 伊斯兰教 · 开端章（法蒂哈） | 诵读：Aaqib Azeez；上传：Atcovi | CC0 | https://commons.wikimedia.org/wiki/File:Chapter_1,_Al-Fatiha_(Murattal)_-_Recitation_of_the_Holy_Qur%27an.mp3 |
+| `hindu-om-namah-shivaya.m4a` | 印度教 · 五字真言（一遍，约 5 秒） | शिव साहिल | CC BY-SA 4.0 | https://commons.wikimedia.org/wiki/File:Om_Namah_Shivaya_audio.wav |
+| `hindu-mahamrityunjaya.m4a` | 印度教 · 大胜死真言（男声） | afleetingspeck（Freesound，用的是公开的试听版） | CC0 | https://freesound.org/people/afleetingspeck/sounds/256992/ |
+| `protestant-psalm23.m4a` | 新教 · 诗篇 23 篇（英王钦定本，朗读；开头有 LibriVox 的一句说明） | Scout Harris（LibriVox） | Public domain | https://librivox.org/bible-passages-collection-002/ |
+| `navayana-refuges-precepts.m4a` | 新乘 · 三皈依与五戒（巴利文唱诵，不是新乘佛教特有的唱法） | palichanting.org（Internet Archive，上传者标为公有领域） | Public domain | https://archive.org/details/three-refuges-and-five-precepts |
 
 许可原文：CC0 https://creativecommons.org/publicdomain/zero/1.0/ · CC BY 4.0 https://creativecommons.org/licenses/by/4.0/ · CC BY 3.0 https://creativecommons.org/licenses/by/3.0/ · CC BY 2.1 JP https://creativecommons.org/licenses/by/2.1/jp/ · CC BY-SA 3.0 https://creativecommons.org/licenses/by-sa/3.0/ · CC BY-SA 4.0 https://creativecommons.org/licenses/by-sa/4.0/
 
-下载日期：2026-11-09。
+下载日期：2026-11-09；最后六行 2026-11-12。
