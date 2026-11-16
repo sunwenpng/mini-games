@@ -12,7 +12,7 @@
     family: 'buddhism',
     status: 'live',
     /* 相对 threshold/index.html 的入口。原版 ../temple-yard/ 保持不动，可随时回退。 */
-    entry: 'traditions/buddhism.han/game/index.html',
+    entry: 'traditions/buddhism.han/game-v2/index.html',
     options: {
       ui: [
         { id: 'zh-CN', state: 'ok' },
