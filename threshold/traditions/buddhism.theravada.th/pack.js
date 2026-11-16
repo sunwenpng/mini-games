@@ -12,7 +12,7 @@
     id: 'buddhism.theravada.th',
     family: 'buddhism',
     status: 'preview',
-    entry: 'traditions/buddhism.theravada.th/game/index.html',
+    entry: 'traditions/buddhism.theravada.th/game-v2/index.html',
     saveKeys: ['threshold-th-save-v1'],
     options: {
       ui: [
