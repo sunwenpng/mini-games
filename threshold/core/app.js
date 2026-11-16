@@ -339,10 +339,30 @@
       </section>` : ''}
       <div class="actions">
         ${ackNeeded && !acked
-          ? `<button type="button" class="primary" data-act="need-ack" aria-describedby="preview-title">${esc(t('action.enter', { place: t('version.' + id + '.place') }))}</button>`
+          ? `<button type="button" class="primary" data-act="need-ack" data-version="${esc(id)}" data-href="${esc(href)}" aria-describedby="preview-title">${esc(t('action.enter', { place: t('version.' + id + '.place') }))}</button>`
           : `<a class="primary" href="${esc(href)}" data-act="enter" data-version="${esc(id)}">${esc(t('action.enter', { place: t('version.' + id + '.place') }))}</a>`}
         <a class="secondary" href="#view=sources&v=${esc(id)}">${esc(t('action.sources'))}</a>
       </div>`;
+  }
+
+  function ackDialog(id, href) {
+    const pack = packOf(id);
+    const wrap = doc.createElement('div');
+    wrap.className = 'ack-modal';
+    wrap.innerHTML = `<div class="ack-card" role="dialog" aria-modal="true" aria-labelledby="ack-h">
+      <h2 id="ack-h">${esc(t('preview.title'))}</h2>
+      <p>${esc(t(pack.previewBody || 'preview.body'))}</p>
+      <div class="actions"><a class="primary" href="${esc(href)}" data-ack-go="1">${esc(t('preview.enterAck'))}</a>
+      <button type="button" class="secondary" data-ack-no="1">${esc(t('preview.notNow'))}</button></div>
+      <p class="note">${esc(t('preview.ack'))}</p></div>`;
+    doc.body.appendChild(wrap);
+    root.requestAnimationFrame(() => wrap.classList.add('in'));
+    const go = wrap.querySelector('[data-ack-go]');
+    go.focus();
+    wrap.addEventListener('click', e => {
+      if (e.target.closest('[data-ack-go]')) { app.save.acks[id] = true; app.save.lastVersion = id; persist(); return; }
+      if (e.target === wrap || e.target.closest('[data-ack-no]')) { wrap.classList.remove('in'); root.setTimeout(() => wrap.remove(), 250); }
+    });
   }
 
   function viewSources() {
@@ -523,9 +543,8 @@
       app.save.lastVersion = el.getAttribute('data-version');
       persist();
     } else if (act === 'need-ack') {
-      const box = doc.querySelector('input[name="ack"]');
-      if (box) box.focus();
-      toast(t('preview.needAck'));
+      /* 以前要先找到页面底部的勾选框，很多人以为“进不去”。现在直接弹出确认窗：确认即勾选并进入。 */
+      ackDialog(el.getAttribute('data-version'), el.getAttribute('data-href'));
     } else if (act === 'export') {
       doc.getElementById('code-out').value = T.Save.exportCode(app.save, readPackSaves());
     } else if (act === 'copy') {
