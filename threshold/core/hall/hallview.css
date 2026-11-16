@@ -1,0 +1,93 @@
+/* 殿内视图样式（v2）。全屏覆盖在游戏上；面板（.sheet）和提示（.toast）层级更高，可以叠在殿内视图上。 */
+.hv {
+  position: fixed; inset: 0; z-index: 3; max-width: 560px; margin: 0 auto; background: #0d0806; color: #f6ecd8;
+  display: grid; grid-template-rows: auto 1fr auto; overflow: hidden;
+  opacity: 0; transform: scale(1.03); transition: opacity .45s ease, transform .6s cubic-bezier(.2,.8,.2,1);
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+}
+.hv.in { opacity: 1; transform: none; }
+.hv-cv { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.hv-top {
+  position: relative; display: flex; align-items: center; gap: 10px; grid-row: 1;
+  padding: calc(10px + env(safe-area-inset-top, 0px)) 12px 10px;
+}
+.hv-title { flex: 1; min-width: 0; display: grid; text-align: center; line-height: 1.3; text-shadow: 0 1px 8px rgba(0,0,0,.8); }
+.hv-title b { font: 700 19px/1.3 "Noto Serif SC", "Songti SC", "STSong", Georgia, serif; letter-spacing: .06em; color: #f8e3b0; }
+.hv-title span { font-size: 12px; color: #e5d6b8; opacity: .9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hv-pill {
+  border: 1px solid rgba(248,227,176,.35); background: rgba(20,12,8,.45); color: #f8e3b0; border-radius: 999px;
+  padding: 7px 13px; font: inherit; font-size: 13.5px; cursor: pointer; white-space: nowrap;
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); transition: transform .15s ease, background .2s ease;
+}
+.hv-pill:active { transform: scale(.94); background: rgba(60,36,20,.6); }
+.hv-about { width: 36px; height: 36px; padding: 0; font-size: 17px; }
+.hv-load {
+  position: absolute; left: 0; right: 0; top: 46%; margin: 0; padding: 12px 16px; border: 0; background: none; width: 100%; font: inherit;
+  text-align: center; color: #e8d6b0; font-size: 14px; letter-spacing: .1em; text-shadow: 0 1px 8px rgba(0,0,0,.8);
+  animation: hv-breathe 1.6s ease-in-out infinite; pointer-events: none;
+}
+.hv-load.err { pointer-events: auto; cursor: pointer; animation: none; text-decoration: underline; text-underline-offset: 4px; }
+@keyframes hv-breathe { 50% { opacity: .35; } }
+.hv-acts {
+  position: relative; display: grid; gap: 6px; grid-row: 3; align-self: end; padding: 10px 10px calc(10px + env(safe-area-inset-bottom, 0px));
+}
+.hv-acts button {
+  display: grid; justify-items: center; gap: 3px; padding: 9px 2px 8px; border-radius: 16px; cursor: pointer;
+  border: 1px solid rgba(248,227,176,.22); background: linear-gradient(180deg, rgba(60,38,22,.55), rgba(24,14,8,.6)); color: #f8ead0;
+  font: inherit; font-size: 12.5px; line-height: 1.2; -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  box-shadow: inset 0 1px 0 rgba(255,236,190,.12), 0 6px 16px rgba(0,0,0,.25);
+  transition: transform .15s cubic-bezier(.3,.7,.4,1.4), background .25s ease, border-color .25s ease;
+}
+.hv-acts button:active { transform: scale(.93); }
+.hv-acts button.on { border-color: rgba(241,190,90,.7); background: linear-gradient(180deg, rgba(120,72,24,.6), rgba(50,28,10,.65)); }
+.hv-acts .i { font-size: 21px; line-height: 1; filter: drop-shadow(0 1px 3px rgba(0,0,0,.5)); }
+.hv-strip {
+  position: absolute; left: 0; right: 0; bottom: calc(86px + env(safe-area-inset-bottom, 0px)); padding: 10px 0 6px;
+  background: linear-gradient(180deg, rgba(10,6,4,0), rgba(10,6,4,.75) 30%); opacity: 0; transform: translateY(14px);
+  transition: opacity .25s ease, transform .3s cubic-bezier(.2,.8,.2,1);
+}
+.hv-strip.in { opacity: 1; transform: none; }
+.hv-strip-h { margin: 0 14px 6px; font-size: 12.5px; color: #e5d6b8; letter-spacing: .05em; }
+.hv-thumbs { display: flex; gap: 10px; overflow-x: auto; padding: 2px 14px 8px; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.hv-thumbs::-webkit-scrollbar { display: none; }
+.hv-thumbs button {
+  flex: 0 0 auto; width: 86px; display: grid; gap: 5px; padding: 0; border: 0; background: none; color: #f4e6c8; cursor: pointer;
+  font: inherit; font-size: 11.5px; line-height: 1.25; text-align: center; scroll-snap-align: center; transition: transform .2s ease;
+}
+.hv-thumbs button:active { transform: scale(.95); }
+.hv-thumbs img { width: 86px; height: 108px; object-fit: cover; border-radius: 12px; border: 2px solid rgba(255,255,255,.12); box-shadow: 0 6px 14px rgba(0,0,0,.4); background: #2a1a10; }
+.hv-thumbs [aria-selected="true"] img { border-color: #f1be5a; box-shadow: 0 0 0 2px rgba(241,190,90,.35), 0 6px 16px rgba(0,0,0,.5); }
+.hv-card, .hv-pop-in {
+  background: linear-gradient(180deg, #fbf6ea, #f3ead6); color: #2a2018; border-radius: 22px 22px 0 0; padding: 16px 18px calc(18px + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 -10px 40px rgba(0,0,0,.45); display: grid; gap: 8px; max-height: 70dvh; overflow: auto;
+}
+.hv-card {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; transform: translateY(100%); transition: transform .35s cubic-bezier(.2,.8,.2,1);
+}
+.hv-card.in { transform: none; }
+.hv-card-h { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.hv-card h2, .hv-pop-in h2 { margin: 0; font: 700 20px/1.35 "Noto Serif SC", "Songti SC", "STSong", Georgia, serif; }
+.hv-sub { margin: 0; color: #7a6a52; font-size: 13.5px; }
+.hv-about-body p { margin: 0 0 8px; font-size: 14.5px; line-height: 1.75; }
+.hv-credit { margin: 4px 0 0; font-size: 11.5px; color: #8a7a62; line-height: 1.5; }
+.hv-credit a { color: #8a5a1f; }
+.hv-x { border: 0; background: rgba(0,0,0,.05); width: 32px; height: 32px; border-radius: 50%; font-size: 22px; line-height: 1; cursor: pointer; color: #6a5a42; flex: 0 0 auto; }
+.hv-pop {
+  position: fixed; inset: 0; z-index: 50; background: rgba(8,5,3,.5); display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0; transition: opacity .25s ease;
+}
+.hv-pop.in { opacity: 1; }
+.hv-pop-in { width: min(560px, 100%); transform: translateY(40px); transition: transform .35s cubic-bezier(.2,.8,.2,1); font-family: "Noto Sans SC", "PingFang SC", system-ui, sans-serif; }
+.hv-pop.in .hv-pop-in { transform: none; }
+.hv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.hv-grid button { display: grid; gap: 3px; padding: 0 0 6px; border: 1px solid #e3d6bc; border-radius: 14px; background: #fff; cursor: pointer; overflow: hidden; font: inherit; color: inherit; text-align: center; transition: transform .15s ease, box-shadow .2s ease; }
+.hv-grid button:active { transform: scale(.96); }
+.hv-grid button.cur { border-color: #c9862a; box-shadow: 0 0 0 2px rgba(201,134,42,.3); }
+.hv-grid img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; background: #2a1a10; }
+.hv-grid b { font-size: 13px; padding: 0 4px; }
+.hv-grid small { font-size: 10.5px; color: #8a7a62; padding: 0 4px; line-height: 1.3; }
+@media (prefers-reduced-motion: reduce) { .hv, .hv-card, .hv-strip, .hv-pop, .hv-pop-in { transition: none !important; } .hv-load { animation: none; } }
+
+/* 实拍 / 动画切换（v3） */
+.hv-mode { font-size: 13px; padding-inline: 12px; white-space: nowrap; }
+.hv-mode[aria-pressed="true"] { border-color: rgba(241,190,90,.7); }
