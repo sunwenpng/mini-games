@@ -11,7 +11,7 @@
     id: ID,
     family: 'islam',
     status: 'preview',
-    entry: 'play.html?p=' + ID,
+    entry: 'play2.html?p=' + ID,
     saveKeys: ['threshold-isl-save-v1'],
     options: {
       ui: [{ id: 'zh-CN', state: 'ok' }, { id: 'en', state: 'draft', why: 'why.draftUi' }],
@@ -34,6 +34,10 @@
     review: { advisor: null, nativeReview: { ar: null, tr: null, en: null, 'zh-CN': 'self' }, lastReview: null },
     rules: { adsInSacredSpace: false, ads: false, practicesYieldCurrency: false, knowledgeOnly: true, noSimulatedPrayer: true, depictions: ['no-figures'], noTTS: true },
     voices: {
+      'ref.ar.fatiha': {
+        kind: 'reference', file: 'audio/islam-fatiha.m4a', license: 'CC0', performer: 'Aaqib Azeez, uploaded by Atcovi (Wikimedia Commons)',
+        sourceUrl: 'https://commons.wikimedia.org/wiki/File:Chapter_1,_Al-Fatiha_(Murattal)_-_Recitation_of_the_Holy_Qur%27an.mp3',
+      },
       'ref.ar': {
         kind: 'reference', file: 'audio/islam-adhan.m4a', license: 'CC0', performer: 'Aishatu98 (Wikimedia Commons)',
         sourceUrl: 'https://commons.wikimedia.org/wiki/File:Adhan.ogg',

@@ -11,7 +11,7 @@
   const rec = o => Object.assign({}, base, o);
   T.CONTENT['islam.mosque'] = [
     rec({
-      id: 'islam.mosque.fatiha', key: 'fatiha', type: 'scripture',
+      id: 'islam.mosque.fatiha', key: 'fatiha', audio: 'ref.ar.fatiha', type: 'scripture',
       title: { 'zh-CN': '开端章（法蒂哈）', en: 'Al-Fātiḥa (The Opening)' },
       edition: 'Qur’an 1:1–7 (Ḥafṣ ʿan ʿĀṣim); English: Pickthall 1930', source: { id: 'Q 1', name: 'Qur’an, Sūrat al-Fātiḥa 1:1–7' },
       text: {
