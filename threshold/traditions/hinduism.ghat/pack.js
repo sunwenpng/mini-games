@@ -11,7 +11,7 @@
     id: ID,
     family: 'hinduism',
     status: 'preview',
-    entry: 'play.html?p=' + ID,
+    entry: 'play2.html?p=' + ID,
     saveKeys: ['threshold-hi-save-v1'],
     options: {
       ui: [{ id: 'zh-CN', state: 'ok' }, { id: 'en', state: 'draft', why: 'why.draftUi' }],
@@ -37,6 +37,14 @@
     review: { advisor: null, nativeReview: { hi: null, en: null, 'zh-CN': 'self' }, lastReview: null },
     rules: { adsInSacredSpace: false, ads: false, practicesYieldCurrency: false, depictions: ['murti-not-interactive'], cowsStay: true },
     voices: {
+      'ref.hi.shiva': {
+        kind: 'reference', file: 'audio/hindu-om-namah-shivaya.m4a', license: 'CC BY-SA 4.0', performer: 'शिव साहिल (Wikimedia Commons)',
+        sourceUrl: 'https://commons.wikimedia.org/wiki/File:Om_Namah_Shivaya_audio.wav',
+      },
+      'ref.hi.mmj': {
+        kind: 'reference', file: 'audio/hindu-mahamrityunjaya.m4a', license: 'CC0', performer: 'afleetingspeck (Freesound)',
+        sourceUrl: 'https://freesound.org/people/afleetingspeck/sounds/256992/',
+      },
       'ref.hi': {
         kind: 'reference', file: 'audio/hindu-gayatri.m4a', license: 'CC0', performer: 'Wilfredor (Wikimedia Commons)',
         sourceUrl: 'https://commons.wikimedia.org/wiki/File:Gayatri_mantra.ogg',

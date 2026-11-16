@@ -24,14 +24,14 @@
       },
     }),
     rec({
-      id: 'hinduism.ghat.panchakshara', key: 'panchakshara', type: 'mantra',
+      id: 'hinduism.ghat.panchakshara', key: 'panchakshara', audio: 'ref.hi.shiva', type: 'mantra',
       title: { 'zh-CN': '五字真言（湿婆）', en: 'Pañcākṣara (Śiva)' },
       edition: 'Common devotional form', source: { id: 'Yajurveda', name: 'Śrī Rudram (Kṛṣṇa Yajurveda), devotional form' },
       text: { orig: ['ॐ नमः शिवाय', 'ॐ नमः शिवाय', 'ॐ नमः शिवाय'], latn: ['oṃ namaḥ śivāya', 'oṃ namaḥ śivāya', 'oṃ namaḥ śivāya'] },
       translations: { 'zh-CN': ['唵，礼敬湿婆。', '唵，礼敬湿婆。', '唵，礼敬湿婆。'], en: ['Om, salutation to Śiva.', 'Om, salutation to Śiva.', 'Om, salutation to Śiva.'] },
     }),
     rec({
-      id: 'hinduism.ghat.mahamrityunjaya', key: 'mahamrityunjaya', type: 'mantra',
+      id: 'hinduism.ghat.mahamrityunjaya', key: 'mahamrityunjaya', audio: 'ref.hi.mmj', type: 'mantra',
       title: { 'zh-CN': '大胜死真言', en: 'Mahāmṛtyuñjaya mantra' },
       edition: 'Ṛgveda 7.59.12', source: { id: 'RV 7.59.12', name: 'Ṛgveda 7.59.12' },
       text: {
