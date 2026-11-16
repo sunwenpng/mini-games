@@ -10,7 +10,7 @@
     id: ID,
     family: 'shinto',
     status: 'preview',
-    entry: 'play.html?p=' + ID,
+    entry: 'play2.html?p=' + ID,
     saveKeys: ['threshold-shinto-save-v1'],
     options: {
       ui: [{ id: 'zh-CN', state: 'ok' }, { id: 'en', state: 'draft', why: 'why.draftUi' }],

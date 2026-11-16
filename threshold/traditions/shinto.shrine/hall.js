@@ -1,0 +1,15 @@
+/*
+ * 殿内可瞻仰的主尊或圣所（v2）。照片均为维基共享资源上允许商用的实拍（许可见 credit.lic），介绍由 AI 根据公开常识起草，未经审核。
+ * 由 tools 生成：改文字请同时改生成脚本，或直接在这里改。
+ */
+HallView.define({
+  id: "shinto.shrine",
+  doorLabel: {"zh-CN": "到拜殿前", "en": "To the haiden"},
+  doorIcon: "⛩",
+  words: "place",
+  halls: [
+    {"id": "haiden", "name": {"zh-CN": "拜殿内 · 神镜", "en": "Inside the haiden · the sacred mirror"}, "sub": {"zh-CN": "神不显形，只有镜与御币", "en": "The kami is not shown: only a mirror and paper streamers"}, "img": "halls/shinto-haiden.jpg", "thumb": "halls/t/shinto-haiden.jpg", "hd": "halls/hd/shinto-haiden.jpg", "focus": [0.5, 0.42], "span": [0.22, 0.8], "about": {"zh-CN": "神道的神（kami）没有神像。拜殿深处常放一面圆镜和白色的纸垂（御币），神体本身藏在后面的本殿里，一般人看不到。\n参拜在拜殿前进行：投香油钱、摇铃，二拜、二拍手、一拜。", "en": "Shinto kami have no images. A round mirror and white paper streamers (gohei) stand at the back of the worship hall; the kami’s vessel itself is hidden in the main sanctuary behind and never shown.\nWorship takes place before the haiden: offering, bell, two bows, two claps, one bow."}, "credit": {"who": "Nevin Thompson", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:Interior_of_the_haiden_of_Jogu_Jinja,_Tsuruga,_May_2016.jpg", "place": {"zh-CN": "福井敦贺常宫神社", "en": "Jōgū Jinja, Tsuruga, Fukui"}, "file": "File:Interior of the haiden of Jogu Jinja, Tsuruga, May 2016.jpg"}},
+    {"id": "honden", "name": {"zh-CN": "本殿", "en": "The honden"}, "sub": {"zh-CN": "神所在的殿，不对外开放", "en": "Where the kami dwells, closed to visitors"}, "img": "halls/shinto-honden.jpg", "thumb": "halls/t/shinto-honden.jpg", "hd": "halls/hd/shinto-honden.jpg", "focus": [0.5, 0.42], "span": [0.1, 0.9], "about": {"zh-CN": "本殿是供奉神体的殿，通常在拜殿后面，门常年关着，只有神职人员在祭典时才能进入。屋顶两端交叉的“千木”和横放的“鲣木”是神社建筑的标志。", "en": "The honden houses the kami’s vessel, usually behind the worship hall; its doors stay closed and only priests enter at festivals. The crossed chigi and horizontal katsuogi on the roof mark shrine architecture."}, "credit": {"who": "Kochizufan", "lic": "CC BY-SA 4.0", "url": "https://commons.wikimedia.org/wiki/File:38sho_Shrine,_Kizugawa_-_Honden_1.jpg", "place": {"zh-CN": "京都府木津川市三十八所神社", "en": "Sanjūhassho Shrine, Kizugawa, Kyoto"}, "file": "File:38sho Shrine, Kizugawa - Honden 1.jpg"}},
+    {"id": "inari", "name": {"zh-CN": "稻荷的狐狸", "en": "Inari’s foxes"}, "sub": {"zh-CN": "伏见稻荷大社", "en": "Fushimi Inari Taisha"}, "img": "halls/shinto-inari.jpg", "thumb": "halls/t/shinto-inari.jpg", "hd": "halls/hd/shinto-inari.jpg", "focus": [0.5, 0.42], "about": {"zh-CN": "狐狸是稻荷神的使者，不是神本身。它们口中常衔着钥匙或宝珠，脖子上系红色围兜。伏见稻荷大社是全日本三万多座稻荷神社的总本社，山上有上千座朱红鸟居。", "en": "Foxes are the messengers of Inari, not the kami itself; they hold keys or jewels and wear red bibs. Fushimi Inari Taisha heads over thirty thousand Inari shrines and is known for its thousands of vermilion torii."}, "credit": {"who": "Balon Greyjoy", "lic": "CC0", "url": "https://commons.wikimedia.org/wiki/File:20181110_Fushimi_Inari_shrine_3.jpg", "place": {"zh-CN": "京都伏见稻荷大社", "en": "Fushimi Inari Taisha, Kyoto"}, "file": "File:20181110 Fushimi Inari shrine 3.jpg"}},
+  ],
+});
