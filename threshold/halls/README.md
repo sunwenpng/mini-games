@@ -104,6 +104,12 @@ v2 新增。全部来自维基共享资源（Wikimedia Commons）上允许商业
 | 祭台与苦像 | `halls/cat-altar.jpg` | Dietmar Rabich | CC BY-SA 4.0 | 德国迪尔门圣十字小堂 | [Dülmen, Kreuzkapelle, Altar -- 2021 -- 7148.jpg](https://commons.wikimedia.org/wiki/File:D%C3%BClmen,_Kreuzkapelle,_Altar_--_2021_--_7148.jpg) |
 | 圣母祭台 | `halls/cat-mary.jpg` | Ammodramus | Public domain | 美国内布拉斯加州麦迪逊圣伦纳德堂 | [St. Leonard church (Madison, Nebraska) Virgin Mary altar 1.JPG](https://commons.wikimedia.org/wiki/File:St._Leonard_church_(Madison,_Nebraska)_Virgin_Mary_altar_1.JPG) |
 | 耶稣圣心像 | `halls/cat-heart.jpg` | Wolfgang Moroder | CC BY-SA 3.0 | 意大利南蒂罗尔奥蒂塞伊 | [Sacred Heart of Jesus Christ by Ludwig Moroder Urtijëi.jpg](https://commons.wikimedia.org/wiki/File:Sacred_Heart_of_Jesus_Christ_by_Ludwig_Moroder_Urtij%C3%ABi.jpg) |
+| 圣伯多禄大殿 | `halls/cat-nave.jpg` | Fczarnowski | CC BY-SA 3.0 | 梵蒂冈圣伯多禄大殿 | [St-Peter Basilica interior 2010.jpg](https://commons.wikimedia.org/wiki/File:St-Peter_Basilica_interior_2010.jpg) |
+| 十字苦像 | `halls/cat-crucifix.jpg` | Didier Descouens | CC BY-SA 4.0 | 意大利威尼斯圣方济各会荣耀圣母堂 | [Frari (Venice) nave left - St.Peter Chapel - Christ of the fifteenth century.jpg](https://commons.wikimedia.org/wiki/File:Frari_(Venice)_nave_left_-_St.Peter_Chapel_-_Christ_of_the_fifteenth_century.jpg) |
+| 圣母怜子像 | `halls/cat-pieta.jpg` | Jebulon | CC0 | 梵蒂冈圣伯多禄大殿 | [Michelangelo's Pietà Saint Peter's Basilica Vatican City.jpg](https://commons.wikimedia.org/wiki/File:Michelangelo%27s_Piet%C3%A0_Saint_Peter%27s_Basilica_Vatican_City.jpg) |
+| 圣伯多禄铜像 | `halls/cat-peter.jpg` | Gary Todd | Public domain | 梵蒂冈圣伯多禄大殿 | [St. Peter's Basilica, Bronze Statue of St. Peter (48466478846).jpg](https://commons.wikimedia.org/wiki/File:St._Peter%27s_Basilica,_Bronze_Statue_of_St._Peter_(48466478846).jpg) |
+| 玫瑰窗 | `halls/cat-rose.jpg` | Julie Anne Workman | CC BY-SA 3.0 | 法国巴黎圣母院 | [North rose window of Notre-Dame de Paris, Aug 2010.jpg](https://commons.wikimedia.org/wiki/File:North_rose_window_of_Notre-Dame_de_Paris,_Aug_2010.jpg) |
+| 创造亚当 | `halls/cat-adam.jpg` | 米开朗基罗（作品，公有领域） | Public domain | 梵蒂冈西斯廷小堂 | [Michelangelo - Creation of Adam (cropped).jpg](https://commons.wikimedia.org/wiki/File:Michelangelo_-_Creation_of_Adam_(cropped).jpg) |
 
 ## 东正教
 
@@ -113,6 +119,12 @@ v2 新增。全部来自维基共享资源（Wikimedia Commons）上允许商业
 | 全能者基督 | `halls/orth-pantocrator.jpg` | 佚名（公有领域） | Public domain | 埃及西奈山圣凯瑟琳修道院 | [CHRIST PANTOCRATOR-SINAI(6th Century).jpg](https://commons.wikimedia.org/wiki/File:CHRIST_PANTOCRATOR-SINAI(6th_Century).jpg) |
 | 诞神女圣像 | `halls/orth-theotokos.jpg` | 佚名（公有领域） | Public domain | 黎巴嫩，十四世纪 | [Theotokos icon, Lebanon (14th century).jpg](https://commons.wikimedia.org/wiki/File:Theotokos_icon,_Lebanon_(14th_century).jpg) |
 | 圣尼古拉圣像 | `halls/orth-nicholas.jpg` | Lapost | CC BY-SA 3.0 | 土耳其海贝利岛哈尔基神学院圣三一堂 | [Saint Nicholas icon, Holy Trinity Church, Halki seminary.JPG](https://commons.wikimedia.org/wiki/File:Saint_Nicholas_icon,_Holy_Trinity_Church,_Halki_seminary.JPG) |
+| 教堂内景 | `halls/orth-nave.jpg` | Globetrotter19 | CC BY-SA 3.0 | 匈牙利久洛圣尼古拉主教座堂 | [Orthodoxe Kathedrale, Innere, Ikonostase, 2022 Gyula.jpg](https://commons.wikimedia.org/wiki/File:Orthodoxe_Kathedrale,_Innere,_Ikonostase,_2022_Gyula.jpg) |
+| 穹顶上的基督 | `halls/orth-dome.jpg` | Bagabondo | CC BY-SA 4.0 | 美国芝加哥圣母领报希腊正教主教座堂 | [Icon of Christ the Almighty at the Annunciation Greek Orthodox Cathedral (Chicago).jpg](https://commons.wikimedia.org/wiki/File:Icon_of_Christ_the_Almighty_at_the_Annunciation_Greek_Orthodox_Cathedral_(Chicago).jpg) |
+| 满堂的马赛克 | `halls/orth-mosaic.jpg` | Perfektangelll | CC BY-SA 3.0 | 俄罗斯圣彼得堡滴血救世主教堂 | [Church of our Savior on the Spilled Blood, interior (2).JPG](https://commons.wikimedia.org/wiki/File:Church_of_our_Savior_on_the_Spilled_Blood,_interior_(2).JPG) |
+| “祈祷图”里的基督 | `halls/orth-deesis.jpg` | Myrabella | Public domain | 土耳其伊斯坦布尔圣索菲亚 | [Christ Pantocrator Deesis mosaic Hagia Sophia.jpg](https://commons.wikimedia.org/wiki/File:Christ_Pantocrator_Deesis_mosaic_Hagia_Sophia.jpg) |
+| 圣三一圣像 | `halls/orth-trinity.jpg` | 安德烈·鲁布廖夫（作品，公有领域） | Public domain | 俄罗斯莫斯科特列季亚科夫画廊 | [Andrey Rublev - Св. Троица - Google Art Project.jpg](https://commons.wikimedia.org/wiki/File:Andrey_Rublev_-_%D0%A1%D0%B2._%D0%A2%D1%80%D0%BE%D0%B8%D1%86%D0%B0_-_Google_Art_Project.jpg) |
+| 复活壁画 | `halls/orth-anastasis.jpg` | Till Niermann | CC BY-SA 3.0 | 土耳其伊斯坦布尔科拉教堂 | [Anastasis fresco, Chora Church, Istanbul.jpg](https://commons.wikimedia.org/wiki/File:Anastasis_fresco,_Chora_Church,_Istanbul.jpg) |
 
 ## 新教
 
@@ -122,6 +134,12 @@ v2 新增。全部来自维基共享资源（Wikimedia Commons）上允许商业
 | 讲坛与祭台 | `halls/prot-cross.jpg` | Georgfotoart | CC BY-SA 4.0 | 德国尼格里普十字教堂 | [Dorfkirche Niegripp, innen 02.jpg](https://commons.wikimedia.org/wiki/File:Dorfkirche_Niegripp,_innen_02.jpg) |
 | 管风琴 | `halls/prot-organ.jpg` | Mosbatho | CC BY 4.0 | 德国里萨三一教堂 | [Church Organ of the Trinity Church in Riesa, 2020.jpg](https://commons.wikimedia.org/wiki/File:Church_Organ_of_the_Trinity_Church_in_Riesa,_2020.jpg) |
 | 彩色玻璃窗 | `halls/cat-window.jpg` | Robert Anning Bell（作品） | Public domain | 苏格兰佩斯利圣马太教堂 | [St Matthew's Church - Paisley - Stained Glass Window.jpg](https://commons.wikimedia.org/wiki/File:St_Matthew%27s_Church_-_Paisley_-_Stained_Glass_Window.jpg) |
+| 基督像 | `halls/prot-christus.jpg` | Andrzej O（摄影）；托瓦尔森（雕塑） | CC BY-SA 4.0 | 丹麦哥本哈根圣母主教座堂 | [København katedra 2.jpg](https://commons.wikimedia.org/wiki/File:K%C3%B8benhavn_katedra_2.jpg) |
+| 德累斯顿圣母教堂 | `halls/prot-dresden.jpg` | Andraszy | CC BY-SA 4.0 | 德国德累斯顿圣母教堂 | [Frauenkirche Dresden Altar von der Galerie.jpg](https://commons.wikimedia.org/wiki/File:Frauenkirche_Dresden_Altar_von_der_Galerie.jpg) |
+| 宗教改革祭坛画 | `halls/prot-cranach.jpg` | W. Bulach | CC BY-SA 4.0 | 德国路德城维滕贝格城市教堂 | [00 3420 Wittenberg - Lutherstadt (Stadtkirche).jpg](https://commons.wikimedia.org/wiki/File:00_3420_Wittenberg_-_Lutherstadt_(Stadtkirche).jpg) |
+| 好牧人彩窗 | `halls/prot-shepherd.jpg` | Nheyob | CC0 | 美国俄亥俄州普莱恩城长老会教堂 | [Presbyterian Church (Plain City, Ohio) - stained glass, Christ the Good Shepherd, detail.jpg](https://commons.wikimedia.org/wiki/File:Presbyterian_Church_(Plain_City,_Ohio)_-_stained_glass,_Christ_the_Good_Shepherd,_detail.jpg) |
+| 木造礼拜堂 | `halls/prot-nave.jpg` | Wolfmann | CC BY-SA 4.0 | 挪威特罗姆瑟主教座堂 | [Tromsø Cathedral (domkirke) Norway interior. Nave (skipet), gallery, choir, altar, pews (kirkebenker), chandeliers, timber roof truss (takstoler), etc Wooden Gothic Revival style church 1861 2019-04-04 DSC02278.jpg](https://commons.wikimedia.org/wiki/File:Troms%C3%B8_Cathedral_(domkirke)_Norway_interior._Nave_(skipet),_gallery,_choir,_altar,_pews_(kirkebenker),_chandeliers,_timber_roof_truss_(takstoler),_etc_Wooden_Gothic_Revival_style_church_1861_2019-04-04_DSC02278.jpg) |
+| 洗礼盆与讲坛 | `halls/prot-font.jpg` | Ammodramus | CC0 | 美国内布拉斯加州内马哈县圣约翰路德宗教堂 | [St. John Lutheran Church (Nemaha Co) pulpit and font 1.JPG](https://commons.wikimedia.org/wiki/File:St._John_Lutheran_Church_(Nemaha_Co)_pulpit_and_font_1.JPG) |
 
 ## 伊斯兰教
 
