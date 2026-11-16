@@ -10,7 +10,7 @@
     id: ID,
     family: 'christianity',
     status: 'preview',
-    entry: 'play.html?p=' + ID,
+    entry: 'play2.html?p=' + ID,
     saveKeys: ['threshold-prot-save-v1'],
     options: {
       ui: [{ id: 'zh-CN', state: 'ok' }, { id: 'en', state: 'draft', why: 'why.draftUi' }],
@@ -33,6 +33,10 @@
     review: { advisor: null, nativeReview: { en: null, 'zh-CN': 'self' }, lastReview: null },
     rules: { adsInSacredSpace: false, ads: false, practicesYieldCurrency: false, depictions: ['no-images-of-christ'], noSacraments: true },
     voices: {
+      'ref.prot.ps23': {
+        kind: 'reference', file: 'audio/protestant-psalm23.m4a', license: 'Public domain', performer: 'Scout Harris, LibriVox (Bible Passages Collection 002)',
+        sourceUrl: 'https://librivox.org/bible-passages-collection-002/',
+      },
       'ref.prot': {
         kind: 'reference', file: 'audio/protestant-amazing-grace.m4a', license: 'Public domain', performer: 'Original Sacred Harp Choir, 1922 (Wikimedia Commons)',
         sourceUrl: 'https://commons.wikimedia.org/wiki/File:Amazing_grace_1922.ogg',

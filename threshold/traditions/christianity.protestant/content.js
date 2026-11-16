@@ -17,7 +17,7 @@
       translations: { 'zh-CN': ['我们在天上的父：愿人都尊你的名为圣。', '愿你的国降临；愿你的旨意行在地上，如同行在天上。', '我们日用的饮食，今日赐给我们。', '免我们的债，如同我们免了人的债。', '不叫我们遇见试探；救我们脱离凶恶。', '因为国度、权柄、荣耀，全是你的，直到永远。阿们！'] },
     }),
     rec({
-      id: 'christianity.protestant.psalm23', key: 'psalm23', type: 'scripture',
+      id: 'christianity.protestant.psalm23', key: 'psalm23', audio: 'ref.prot.ps23', type: 'scripture',
       title: { 'zh-CN': '诗篇 23 篇', en: 'Psalm 23' },
       edition: 'King James Version; 和合本', source: { id: 'Ps 23', name: 'Psalm 23 (KJV 1611; Chinese Union Version 1919)' },
       text: { orig: ['The LORD is my shepherd; I shall not want.', 'He maketh me to lie down in green pastures: he leadeth me beside the still waters.', 'He restoreth my soul: he leadeth me in the paths of righteousness for his name’s sake.', 'Yea, though I walk through the valley of the shadow of death, I will fear no evil: for thou art with me; thy rod and thy staff they comfort me.', 'Thou preparest a table before me in the presence of mine enemies: thou anointest my head with oil; my cup runneth over.', 'Surely goodness and mercy shall follow me all the days of my life: and I will dwell in the house of the LORD for ever.'] },
