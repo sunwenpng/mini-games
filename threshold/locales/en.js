@@ -253,6 +253,8 @@
     "preview.title": "This is an unreviewed preview",
     "preview.body": "The Thai Theravada version was drafted by AI from public sources. No Thai monk or scholar has reviewed it, and the Thai text has not been checked by a native speaker. Pali spelling, translations, etiquette notes and festival dates may be wrong. It exists to test whether the platform can carry a tradition very different from Han Buddhism, and it does not represent any temple.",
     "preview.ack": "I understand this is an unreviewed preview and may contain errors",
+    "preview.enterAck": "I understand, enter",
+    "preview.notNow": "Not now",
     "preview.needAck": "Please tick the confirmation above first",
     "notice.th.experience": "This is a cultural experience. It does not represent any temple or monastic community and promises no spiritual result.",
     "notice.th.etiquette": "Take off your shoes in the temple and cover shoulders and knees. When seated, do not point your feet at a Buddha image or a monk. Women do not hand things directly to monks.",
