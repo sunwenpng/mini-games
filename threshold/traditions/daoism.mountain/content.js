@@ -25,7 +25,7 @@
       edition: '王弼本', source: { id: 'DDJ 8', name: '《道德经》第八章（王弼本）' },
       text: {
         orig: ['上善若水。', '水善利万物而不争，', '处众人之所恶，故几于道。', '居善地，心善渊，与善仁，', '言善信，正善治，事善能，动善时。', '夫唯不争，故无尤。'],
-        latn: ['shàng shàn ruò shuǐ.', 'shuǐ shàn lì wàn wù ér bù zhēng,', 'chǔ zhòng rén zhī suǒ wù, gù jī yú dào.', 'jū shàn dì, xīn shàn yuān, yǔ shàn rén,', 'yán shàn xìn, zhèng shàn zhì, shì shàn néng, dòng shàn shí.', 'fū wéi bù zhēng, gù wú yóu.'],
+        latn: ['shàng shàn ruò shuǐ.', 'shuǐ shàn lì wàn wù ér bù zhēng,', 'chǔ zhòng rén zhī suǒ wù, gù jī yú dào.', 'jū shàn dì, xīn shàn yuān, yǔ shàn rén,', 'yán shàn xìn, zhèng shàn zhì, shì shàn néng, dòng shàn shí.', 'fú wéi bù zhēng, gù wú yóu.'],
       },
       translations: {
         'zh-CN': ['最高的善像水一样。', '水善于滋养万物而不与之争，', '停留在众人厌恶的低处，所以接近于道。', '居处善于选地，心善于沉静，待人善于仁爱，', '说话善于守信，为政善于治理，做事善于发挥所长，行动善于把握时机。', '正因为不争，所以没有过失。'],
